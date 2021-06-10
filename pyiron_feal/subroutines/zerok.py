@@ -43,13 +43,13 @@ class ZeroK(HasProject):
         return {
             potl: {
                 routine.__name__: self._get_job(potl, routine, delete_existing_job=delete_existing_job)
-                for routine in self.structure_routines
+                for routine in self._structure_routines
             }
             for potl in self.project.input.potentials
         }
 
     @property
-    def structure_routines(self):
+    def _structure_routines(self):
         sf = self.project.create.structure.FeAl
         return [sf.BCC, sf.FCC, sf.B2, sf.D03, sf.random_BCC, sf.random_FCC]
 
@@ -91,12 +91,11 @@ class _Results:
 
     def _read_table(self):
         df = DataFrame(columns=['potential', 'structure', 'n_atoms', 'n_Al', 'E_pot'])
-        for potl in self._zerok.project.input.potentials:
-            for routine in self._zerok.structure_routines:
-                job = self._zerok.job_dict[potl][routine.__name__]
+        for potl, struct_based_dict in self._zerok.job_dict.items():
+            for struct, job in struct_based_dict.items():
                 df = df.append({
                     'potential': potl,
-                    'structure': routine.__name__,
+                    'structure': struct,
                     'n_atoms': len(job.structure),
                     'n_Al': np.sum(job.structure.get_chemical_symbols() == 'Al'),
                     'E_pot': job.output.energy_pot[-1],
