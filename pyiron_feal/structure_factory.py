@@ -40,11 +40,14 @@ class _FeAlStructures:
     def __init__(self, factory: StructureFactory):
         self._factory = factory
 
+    def _unit(self, a=None):
+        return self._factory.bulk('Fe', a=a, cubic=True)
+
     def BCC(self, a=None):
-        return self._factory.bulk('Fe', a=a, cubic=True).repeat(2)
+        return self._unit(a=a).repeat(2)
 
     def B2(self, a=None):
-        struct = self._factory.bulk('Fe', a=a, cubic=True)
+        struct = self._unit(a=a)
         struct[1] = 'Al'
         return struct.repeat(2)
 
@@ -55,7 +58,26 @@ class _FeAlStructures:
         return struct
 
     def random(self, a=None, repeat=2):
-        struct = self._factory.bulk('Fe', a=a, cubic=True).repeat(repeat)
+        struct = self._unit(a=a).repeat(repeat)
         n_Al = round(self._Al_at_frac * len(struct))
-        struct[np.random.choice(range(len(struct)), n_Al)] = 'Al'
+        struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
+        return struct
+
+    def FCC(self, a=None):
+        return self._factory.bulk(
+            'Fe',
+            crystalstructure='fcc',
+            a=a if a is not None else self._fcc_lattice_constant,
+            cubic=True
+        ).repeat(2)
+
+    @property
+    def _fcc_lattice_constant(self):
+        d_1NN = self._unit().get_neighbors(num_neighbors=1, id_list=[0]).distances[0, 0]
+        return d_1NN * np.sqrt(2)
+
+    def random_FCC(self, a=None, repeat=2):
+        struct = self.FCC(a=a).repeat(repeat)
+        n_Al = round(self._Al_at_frac * len(struct))
+        struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
         return struct

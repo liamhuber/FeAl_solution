@@ -20,8 +20,11 @@ class TestStructureFactory(TestCase):
         n_bcc = len(self.sf.BCC())
         n_b2 = len(self.sf.B2())
         n_d03 = len(self.sf.D03())
-        self.assertEqual(n_b2, n_bcc, msg="B2 structure not the same length as BCC structure")
-        self.assertEqual(n_d03, n_bcc, msg="D03 structure not the same length as BCC structure")
+        n_fcc = len(self.sf.FCC())
+        self.assertEqual(n_bcc, n_b2, msg="B2 structure not the same length as BCC structure")
+        self.assertEqual(n_bcc, n_d03, msg="D03 structure not the same length as BCC structure")
+        self.assertEqual(2*n_bcc, n_fcc,
+                         msg="FCC structure has twice as many atoms in unit cell, so should be 2x larger")
 
     @staticmethod
     def _get_frac_Al(structure):
@@ -43,6 +46,15 @@ class TestStructureFactory(TestCase):
 
     def test_random(self):
         random = self.sf.random()
+        self.assertAlmostEqual(
+            1,
+            self.sf._Al_at_frac / self._get_frac_Al(random),
+            places=1,
+            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {self.sf._Al_at_frac}."
+        )
+
+    def test_random_fcc(self):
+        random = self.sf.random_FCC(repeat=3)
         self.assertAlmostEqual(
             1,
             self.sf._Al_at_frac / self._get_frac_Al(random),
