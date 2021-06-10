@@ -4,6 +4,7 @@
 
 from pyiron_atomistics import Project as ProjectCore
 from pyiron_feal.structure_factory import StructureFactory
+from pyiron_base import DataContainer
 
 
 __author__ = "Liam Huber"
@@ -18,6 +19,23 @@ __status__ = "development"
 __date__ = "Jun 10, 2021"
 
 
+class ProjectInput(DataContainer):
+    def __init__(self, init=None, table_name=None):
+        super().__init__(init=init, table_name=table_name)
+        self.potentials_eam = [
+            '2005--Mendelev-M-I--Al-Fe--LAMMPS--ipr1',
+            '2020--Farkas-D--Fe-Ni-Cr-Co-Al--LAMMPS--ipr1',
+        ]
+        self.potentials_meam = [
+            '2010--Lee-E--Fe-Al--LAMMPS--ipr1',
+            '2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2',
+        ]
+
+    @property
+    def potentials(self):
+        return self.potentials_eam + self.potentials_meam
+
+
 class Project(ProjectCore):
 
     def __init__(self, path="", user=None, sql_query=None, default_working_directory=False):
@@ -28,3 +46,12 @@ class Project(ProjectCore):
             default_working_directory=default_working_directory
         )
         self.create._structure = StructureFactory()
+
+    @property
+    def input(self) -> ProjectInput:
+        # A workaround since we can't populate the data field in `__init__`
+        try:
+            return self.data.input
+        except AttributeError:
+            self.data.input = ProjectInput()
+            return self.data.input
