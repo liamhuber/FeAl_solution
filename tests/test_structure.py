@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pyiron_feal.structure_factory import StructureFactory
+from pyiron_feal.factories.structure import StructureFactory
 import numpy as np
 
 

@@ -3,7 +3,7 @@
 # Distributed under the terms of "New BSD License", see the LICENSE file.
 
 from pyiron_atomistics import Project as ProjectCore
-from pyiron_feal.structure_factory import StructureFactory
+from pyiron_feal.factories.structure import StructureFactory
 from pyiron_base import DataContainer
 
 
