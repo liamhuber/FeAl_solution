@@ -192,7 +192,7 @@
 <p>This is a placeholder example notebook running and atomistic Lammps job.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyiron_src</span> <span class="kn">import</span> <span class="n">Project</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyiron_feal</span> <span class="kn">import</span> <span class="n">Project</span>
 </pre></div>
 </div>
 </div>
@@ -206,40 +206,375 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">Lammps</span><span class="p">(</span><span class="s1">&#39;lmp&#39;</span><span class="p">)</span>
-<span class="n">job</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">bulk</span><span class="p">(</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">job</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr</span><span class="o">.</span><span class="n">ZeroK</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/base.py:238: UserWarning: No potential set via job.potential - use default potential, 1995--Angelo-J-E--Ni-Al-H--LAMMPS--ipr1
-  warnings.warn(&quot;No potential set via job.potential - use default potential, &quot; + lst_of_potentials[0])
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2021-06-10 20:36:40,685 - pyiron_log - WARNING - Job &#39;zerok_potl0_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:40,897 - pyiron_log - WARNING - Job &#39;zerok_potl0_FCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:41,144 - pyiron_log - WARNING - Job &#39;zerok_potl0_B2&#39; does not exist and cannot be loaded
+2021-06-10 20:36:41,323 - pyiron_log - WARNING - Job &#39;zerok_potl0_D03&#39; does not exist and cannot be loaded
+2021-06-10 20:36:41,500 - pyiron_log - WARNING - Job &#39;zerok_potl0_random_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:41,687 - pyiron_log - WARNING - Job &#39;zerok_potl0_random_FCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:41,934 - pyiron_log - WARNING - Job &#39;zerok_potl1_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:42,237 - pyiron_log - WARNING - Job &#39;zerok_potl1_FCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:42,423 - pyiron_log - WARNING - Job &#39;zerok_potl1_B2&#39; does not exist and cannot be loaded
+2021-06-10 20:36:42,611 - pyiron_log - WARNING - Job &#39;zerok_potl1_D03&#39; does not exist and cannot be loaded
+2021-06-10 20:36:42,794 - pyiron_log - WARNING - Job &#39;zerok_potl1_random_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:42,989 - pyiron_log - WARNING - Job &#39;zerok_potl1_random_FCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:43,245 - pyiron_log - WARNING - Job &#39;zerok_potl2_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:43,463 - pyiron_log - WARNING - Job &#39;zerok_potl2_FCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:43,882 - pyiron_log - WARNING - Job &#39;zerok_potl2_B2&#39; does not exist and cannot be loaded
+2021-06-10 20:36:44,108 - pyiron_log - WARNING - Job &#39;zerok_potl2_D03&#39; does not exist and cannot be loaded
+2021-06-10 20:36:44,480 - pyiron_log - WARNING - Job &#39;zerok_potl2_random_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:44,679 - pyiron_log - WARNING - Job &#39;zerok_potl2_random_FCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:44,953 - pyiron_log - WARNING - Job &#39;zerok_potl3_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:45,097 - pyiron_log - WARNING - Job &#39;zerok_potl3_FCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:45,298 - pyiron_log - WARNING - Job &#39;zerok_potl3_B2&#39; does not exist and cannot be loaded
+2021-06-10 20:36:45,490 - pyiron_log - WARNING - Job &#39;zerok_potl3_D03&#39; does not exist and cannot be loaded
+2021-06-10 20:36:45,679 - pyiron_log - WARNING - Job &#39;zerok_potl3_random_BCC&#39; does not exist and cannot be loaded
+2021-06-10 20:36:45,881 - pyiron_log - WARNING - Job &#39;zerok_potl3_random_FCC&#39; does not exist and cannot be loaded
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job lmp was saved and received the ID: 13
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl0_BCC was saved and received the ID: 2426
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl0_FCC was saved and received the ID: 2427
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl0_B2 was saved and received the ID: 2428
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl0_D03 was saved and received the ID: 2429
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl0_random_BCC was saved and received the ID: 2430
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl0_random_FCC was saved and received the ID: 2431
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl1_BCC was saved and received the ID: 2432
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl1_FCC was saved and received the ID: 2433
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl1_B2 was saved and received the ID: 2434
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl1_D03 was saved and received the ID: 2435
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl1_random_BCC was saved and received the ID: 2436
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl1_random_FCC was saved and received the ID: 2437
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl2_BCC was saved and received the ID: 2438
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl2_FCC was saved and received the ID: 2439
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl2_B2 was saved and received the ID: 2440
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl2_D03 was saved and received the ID: 2441
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl2_random_BCC was saved and received the ID: 2442
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl2_random_FCC was saved and received the ID: 2443
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl3_BCC was saved and received the ID: 2444
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl3_FCC was saved and received the ID: 2445
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl3_B2 was saved and received the ID: 2446
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl3_D03 was saved and received the ID: 2447
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl3_random_BCC was saved and received the ID: 2448
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job zerok_potl3_random_FCC was saved and received the ID: 2449
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity indices. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity velocities. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
+/Users/huber/Liam/pyiron/pyiron_repos/pyiron_atomistics/pyiron_atomistics/lammps/units.py:201: UserWarning: Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity steps. Returning un-normalized quantity
+  warnings.warn(message=&quot;Warning: Couldn&#39;t determine the LAMMPS to pyiron unit conversion type of quantity &quot;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">energy_pot</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr</span><span class="o">.</span><span class="n">ZeroK</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">FCC_BCC_stability</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-13.43999999])
-</pre></div>
-</div>
-</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>potential</th>
+      <th>FCC-BCC [eV/atom]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2005--Mendelev-M-I--Al-Fe--LAMMPS--ipr1</td>
+      <td>0.120580</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2010--Lee-E--Fe-Al--LAMMPS--ipr1</td>
+      <td>0.047901</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2</td>
+      <td>0.007687</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2020--Farkas-D--Fe-Ni-Cr-Co-Al--LAMMPS--ipr1</td>
+      <td>-0.099058</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr</span><span class="o">.</span><span class="n">remove_jobs_silently</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pr</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr</span><span class="o">.</span><span class="n">ZeroK</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">plot_stability</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 288x576 with 4 Axes&gt;,
+ array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;2005--Mendelev-M-I--Al-Fe--LAMMPS--ipr1&#39;}, ylabel=&#39;$U_\\mathrm{struct} - U_\\mathrm{BCC}$ [eV/atom]&#39;&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;2010--Lee-E--Fe-Al--LAMMPS--ipr1&#39;}, ylabel=&#39;$U_\\mathrm{struct} - U_\\mathrm{BCC}$ [eV/atom]&#39;&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2&#39;}, ylabel=&#39;$U_\\mathrm{struct} - U_\\mathrm{BCC}$ [eV/atom]&#39;&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;2020--Farkas-D--Fe-Ni-Cr-Co-Al--LAMMPS--ipr1&#39;}, xlabel=&#39;$\\mu_{Al} - \\mu_{Fe}$ [eV]&#39;, ylabel=&#39;$U_\\mathrm{struct} - U_\\mathrm{BCC}$ [eV/atom]&#39;&gt;],
+       dtype=object))
+</pre></div>
+</div>
+<img alt="_images/example_5_1.png" src="_images/example_5_1.png" />
 </div>
 </div>
 </div>
