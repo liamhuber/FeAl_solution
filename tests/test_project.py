@@ -7,5 +7,8 @@ from pyiron_feal._test import TestWithProject
 
 class TestProject(TestWithProject):
 
-    def test_void(self):
-        pass
+    def test_input(self):
+        self.assertListEqual(
+            self.project.input.potentials,
+            self.project.input.potentials_eam + self.project.input.potentials_meam
+        )
