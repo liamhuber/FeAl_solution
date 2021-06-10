@@ -44,7 +44,7 @@ class TestStructureFactory(TestCase):
         # Lazily ignoring the location of the Al atoms
 
     def test_random(self):
-        random = self.sf.random()
+        random = self.sf.random_BCC()
         self.assertAlmostEqual(
             1,
             self.sf._Al_at_frac / self._get_frac_Al(random),

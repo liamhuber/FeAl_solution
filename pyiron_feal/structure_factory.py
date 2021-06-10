@@ -54,7 +54,7 @@ class _FeAlStructures:
         struct[manually_identified_Al_sites] = 'Al'
         return struct
 
-    def random(self, a=None, repeat=2):
+    def random_BCC(self, a=None, repeat=2):
         struct = self.BCC(a=a).repeat(repeat)
         n_Al = round(self._Al_at_frac * len(struct))
         struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
