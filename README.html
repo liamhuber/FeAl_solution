@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyiron publication template &#8212; FeAl_solution</title>
+    <title>FeAl solution study &#8212; FeAl_solution</title>
     
   <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -52,6 +52,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pyiron example notebook" href="example.html" />
@@ -87,7 +89,7 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="reference internal" href="#">
-   pyiron publication template
+   FeAl solution study
   </a>
  </li>
 </ul>
@@ -168,30 +170,42 @@
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#step-by-step">
-   Step by step
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   FeAl solution study
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#mybinder">
-   mybinder
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pyiron-publication-template">
+   pyiron publication template
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#jupyterbook">
-   jupyterbook
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#everything-else">
-   Everything else
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#license">
-   License
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-by-step">
+     Step by step
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mybinder">
+     mybinder
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#jupyterbook">
+     jupyterbook
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#everything-else">
+     Everything else
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#license">
+     License
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -205,16 +219,40 @@
         
               <div>
                 
-  <div class="section" id="pyiron-publication-template">
+  <div class="section" id="feal-solution-study">
+<h1>FeAl solution study<a class="headerlink" href="#feal-solution-study" title="Permalink to this headline">¶</a></h1>
+<p>In collaboration with Bat et al. we will look at FeAl solid solution along with B2 and D03 phases.
+The current working plan is:</p>
+<ul class="simple">
+<li><p>Liam (or Raynol)) Makes a quick notebook of 0K calculations for the relevant phases and passes it to Raynol</p></li>
+<li><p>Raynol) MD for volume distributions at relevant temperatures; TILD for bulk Fe total free energy; TILD for chemical change to get B2 or D03</p>
+<ul>
+<li><p>This might need some conceptual adjustment if the B2/D03 volumes are way off from bulk Fe. As long as the distributions overlap, we can run TILD at the point of maximum overlap in the distributions and apply the C&amp;C conversion from Helmholtz to Gibbs</p></li>
+</ul>
+</li>
+<li><p>Raynol and Liam) Analysis of phase stabilities in <span class="math notranslate nohighlight">\((T, \Delta\mu_{Al})\)</span>-space to nail down the most useful chemical potentials for MC/MD</p>
+<ul>
+<li><p>With the variance constrained MC/MD the chemical potential is not absolutely critical, but (a) this analysis will already tell us if we have even a chance of the phases both forming, and (b) having a good chempot still speeds up the MC/MD</p></li>
+</ul>
+</li>
+<li><p>Marvin (or Liam)) foreach potential foreach temperature MC/MD calculations</p></li>
+<li><p>Marvin (or Liam)) Chemically-resolved structural analysis to look for signatures of the secondary phases</p>
+<ul>
+<li><p>Then we pass off the point cloud data to the experimentalists, maybe with some sort of slicing into a needle-shape so they don’t have to learn about PBCs</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="pyiron-publication-template">
 <h1>pyiron publication template<a class="headerlink" href="#pyiron-publication-template" title="Permalink to this headline">¶</a></h1>
 <p>This template is forked from the official pyiron template and adapted for my own research projects.
 In particular, it is assumed that there is custom <code class="docutils literal notranslate"><span class="pre">.py</span></code> code that should have unit tests.</p>
 <div class="section" id="step-by-step">
 <h2>Step by step<a class="headerlink" href="#step-by-step" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Create a new project with this template.</p></li>
-<li><p>Update the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> to the basic resources you will need.</p></li>
-<li><p>Refactor –&gt; Rename <code class="docutils literal notranslate"><span class="pre">pyiron_src</span></code> to something sensible for your project.</p></li>
+<li><p>~~Create a new project with this template.~~</p></li>
+<li><p>~~Update the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> to the basic resources you will need.~~</p></li>
+<li><p>~~Refactor –&gt; Rename <code class="docutils literal notranslate"><span class="pre">pyiron_src</span></code> to something sensible for your project.~~</p></li>
 <li><p>Update <code class="docutils literal notranslate"><span class="pre">example.ipynb</span></code> to run something simple using your new pyiron library.</p></li>
 <li><p>Develop and science your heart out.</p>
 <ul>
