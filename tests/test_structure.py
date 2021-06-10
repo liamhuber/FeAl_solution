@@ -12,8 +12,7 @@ class TestStructureFactory(TestCase):
         bcc = self.sf.BCC()
         cell = bcc.cell.array
         self.assertTrue(np.allclose(np.diag(cell), cell[0, 0]), msg="Cell not cubic")
-        a = cell[0, 0] / 2  # Since bcc cell is repeated by default
-        double = self.sf.BCC(a=2*a)
+        double = self.sf.BCC(a=2*cell[0, 0])
         self.assertAlmostEqual((2**3) * bcc.get_volume(), double.get_volume(), msg=" correctly")
 
     def test_lengths_the_same(self):
@@ -22,7 +21,7 @@ class TestStructureFactory(TestCase):
         n_d03 = len(self.sf.D03())
         n_fcc = len(self.sf.FCC())
         self.assertEqual(n_bcc, n_b2, msg="B2 structure not the same length as BCC structure")
-        self.assertEqual(n_bcc, n_d03, msg="D03 structure not the same length as BCC structure")
+        self.assertEqual((2**3)*n_bcc, n_d03, msg="D03 structure not the same length as BCC structure")
         self.assertEqual(2*n_bcc, n_fcc,
                          msg="FCC structure has twice as many atoms in unit cell, so should be 2x larger")
 
