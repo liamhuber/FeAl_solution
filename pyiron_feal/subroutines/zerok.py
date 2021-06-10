@@ -5,6 +5,10 @@
 from pyiron_feal.utils import HasProject, JobName
 import numpy as np
 from pandas import DataFrame
+from scipy.constants import physical_constants
+KB = physical_constants['Boltzmann constant in eV/K'][0]
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 __author__ = "Liam Huber"
 __copyright__ = (
@@ -118,3 +122,20 @@ class _Results:
                 'FCC-BCC [eV/atom]': self.get_energy(potential, 'FCC') - self.get_energy(potential, 'BCC')
             }, ignore_index=True)
         return df
+
+    def plot_stability(self, dmu=None, figsize=None):
+        dmu = dmu if dmu is not None else np.linspace(-1, 2, 100)
+        potentials = np.unique(self.table['potential'].values)
+        fig, axes = plt.subplots(len(potentials), sharex=True, figsize=figsize if figsize is not None else (4, 8))
+        for i, potl in enumerate(potentials):
+            e_ref = self.get_energy(potl, 'BCC')
+            for struct in ['B2', 'D03', 'random_BCC']:
+                axes[i].plot(dmu, self.get_energy(potl, struct, dmu_Al=dmu) - e_ref, label=struct)
+            axes[i].set_title(potl)
+            axes[i].set_ylabel('$U_\mathrm{struct} - U_\mathrm{BCC}$ [eV/atom]')
+            axes[i].axvline(0, color='k', linestyle='--')
+            axes[i].axhline(0, color='k', linestyle='--')
+        axes[0].legend()
+        axes[-1].set_xlabel('$\mu_{Al} - \mu_{Fe}$ [eV]')
+        fig.tight_layout()
+        return fig, axes
