@@ -36,11 +36,14 @@ class JobName(str):
     def T(self, temperature):
         return self.append(f'{self._round(temperature)}K')
 
-    @property
-    def min(self):
-        return self.append('min')
+    def potl(self, potl_index):
+        return self.append(f'potl{potl_index}')
 
 
 class HasProject:
     def __init__(self, project):
         self._project = project
+
+    @property
+    def project(self):
+        return self._project

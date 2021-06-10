@@ -5,6 +5,8 @@
 from pyiron_atomistics import Project as ProjectCore
 from pyiron_feal.factories.structure import StructureFactory
 from pyiron_base import DataContainer
+from pyiron_feal.subroutines import ZeroK
+import numpy as np
 
 
 __author__ = "Liam Huber"
@@ -22,18 +24,18 @@ __date__ = "Jun 10, 2021"
 class ProjectInput(DataContainer):
     def __init__(self, init=None, table_name=None):
         super().__init__(init=init, table_name=table_name)
-        self.potentials_eam = [
+        self.potentials_eam = np.array([
             '2005--Mendelev-M-I--Al-Fe--LAMMPS--ipr1',
             '2020--Farkas-D--Fe-Ni-Cr-Co-Al--LAMMPS--ipr1',
-        ]
-        self.potentials_meam = [
+        ])
+        self.potentials_meam = np.array([
             '2010--Lee-E--Fe-Al--LAMMPS--ipr1',
             '2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2',
-        ]
+        ])
 
     @property
     def potentials(self):
-        return self.potentials_eam + self.potentials_meam
+        return np.append(self.potentials_eam, self.potentials_meam)
 
 
 class Project(ProjectCore):
@@ -46,6 +48,7 @@ class Project(ProjectCore):
             default_working_directory=default_working_directory
         )
         self.create._structure = StructureFactory()
+        self._zerok = ZeroK(self)
 
     @property
     def input(self) -> ProjectInput:
@@ -55,3 +58,7 @@ class Project(ProjectCore):
         except AttributeError:
             self.data.input = ProjectInput()
             return self.data.input
+
+    @property
+    def ZeroK(self):
+        return self._zerok
