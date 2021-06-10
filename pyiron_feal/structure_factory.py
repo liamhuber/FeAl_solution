@@ -3,6 +3,7 @@
 # Distributed under the terms of "New BSD License", see the LICENSE file.
 
 from pyiron_atomistics.atomistics.structure.factory import StructureFactory as FactoryCore
+import numpy as np
 
 __author__ = "Liam Huber"
 __copyright__ = (
@@ -51,4 +52,10 @@ class _FeAlStructures:
         struct = self.BCC(a=a)
         manually_identified_Al_sites = [5, 9, 3, 15]
         struct[manually_identified_Al_sites] = 'Al'
+        return struct
+
+    def random(self, a=None, repeat=2):
+        struct = self._factory.bulk('Fe', a=a, cubic=True).repeat(repeat)
+        n_Al = round(self._Al_at_frac * len(struct))
+        struct[np.random.choice(range(len(struct)), n_Al)] = 'Al'
         return struct

@@ -1,8 +1,6 @@
 from unittest import TestCase
-
-import numpy as np
-
 from pyiron_feal.structure_factory import StructureFactory
+import numpy as np
 
 
 class TestStructureFactory(TestCase):
@@ -29,6 +27,12 @@ class TestStructureFactory(TestCase):
     def _get_frac_Al(structure):
         return np.sum(structure.get_chemical_symbols() == 'Al') / len(structure)
 
+    def test_get_frac_Al(self):
+        struct = self.sf.BCC()
+        struct[0] = 'Al'
+        struct[1:] = 'Fe'
+        self.assertAlmostEqual(1. / len(struct), self._get_frac_Al(struct))
+
     def test_B2(self):
         self.assertAlmostEqual(0.5, self._get_frac_Al(self.sf.B2()), msg="B2 chemistry incorrect")
         # Lazily ignoring the location of the Al atoms
@@ -36,3 +40,12 @@ class TestStructureFactory(TestCase):
     def test_D03(self):
         self.assertAlmostEqual(0.25, self._get_frac_Al(self.sf.D03()), msg="D03 chemistry incorrect")
         # Lazily ignoring the location of the Al atoms
+
+    def test_random(self):
+        random = self.sf.random()
+        self.assertAlmostEqual(
+            1,
+            self.sf._Al_at_frac / self._get_frac_Al(random),
+            places=1,
+            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {self.sf._Al_at_frac}."
+        )
