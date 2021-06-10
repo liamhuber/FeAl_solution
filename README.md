@@ -3,7 +3,7 @@
 In collaboration with Bat et al. we will look at FeAl solid solution along with B2 and D03 phases.
 The current working plan is:
 
-- Liam (or Raynol)) Makes a quick notebook of 0K calculations for the relevant phases and passes it to Raynol
+- ~~Liam (or Raynol)) Makes a quick notebook of 0K calculations for the relevant phases and passes it to Raynol~~
 - Raynol) MD for volume distributions at relevant temperatures; TILD for bulk Fe total free energy; TILD for chemical change to get B2 or D03
   - This might need some conceptual adjustment if the B2/D03 volumes are way off from bulk Fe. As long as the distributions overlap, we can run TILD at the point of maximum overlap in the distributions and apply the C&C conversion from Helmholtz to Gibbs
 - Raynol and Liam) Analysis of phase stabilities in $(T, \Delta\mu_{Al})$-space to nail down the most useful chemical potentials for MC/MD
