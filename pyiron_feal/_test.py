@@ -7,7 +7,7 @@
 import unittest
 from os.path import split, join
 from os import remove
-from pyiron_src.project import Project
+from pyiron_feal.project import Project
 from abc import ABC
 from inspect import getfile
 

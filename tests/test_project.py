@@ -2,7 +2,7 @@
 # Copyright (c) Max-Planck-Institut für Eisenforschung GmbH - Computational Materials Design (CM) Department
 # Distributed under the terms of "New BSD License", see the LICENSE file.
 
-from pyiron_src._test import TestWithProject
+from pyiron_feal._test import TestWithProject
 
 
 class TestProject(TestWithProject):
