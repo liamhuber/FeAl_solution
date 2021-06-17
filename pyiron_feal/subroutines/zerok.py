@@ -139,3 +139,15 @@ class _Results:
         axes[-1].set_xlabel('$\mu_{Al} - \mu_{Fe}$ [eV]')
         fig.tight_layout()
         return fig, axes
+
+    def important_results_dict(self):
+        results_dict = {}
+        for potl, struct_based_dict in self._zerok.job_dict.items():
+            results_dict[potl] = {}
+            for struct, job in struct_based_dict.items():
+                results_dict[potl][struct] = {}
+                results_dict[potl][struct]['minimized_structure'] = job.get_structure()
+                results_dict[potl][struct]['n_atoms'] = job.structure.get_number_of_atoms()
+                results_dict[potl][struct]['energy_pot'] = job.output.energy_pot[-1]
+                results_dict[potl][struct]['volume'] = job.output.volume[-1]
+        return results_dict

@@ -30,7 +30,7 @@ class ProjectInput(DataContainer):
         ])
         self.potentials_meam = np.array([
             '2010--Lee-E--Fe-Al--LAMMPS--ipr1',
-            '2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2',
+            # '2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2',  # did not work on my PC
         ])
 
     @property
