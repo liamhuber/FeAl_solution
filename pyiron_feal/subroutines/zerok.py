@@ -64,9 +64,9 @@ class ZeroK(HasProject):
             job = self._create_job(name, structure_routine(), potential)
         return job
 
-    def _create_job(self, name, structure, potential, repeat=2):
+    def _create_job(self, name, structure, potential):
         job = self.project.create.job.Lammps(name, delete_existing_job=True)
-        job.structure = structure.repeat(repeat)
+        job.structure = structure
         job.potential = potential
         job.calc_minimize(pressure=0)
         return job
