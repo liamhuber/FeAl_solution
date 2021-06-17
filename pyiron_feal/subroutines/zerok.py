@@ -55,7 +55,7 @@ class ZeroK(HasProject):
     @property
     def _structure_routines(self):
         sf = self.project.create.structure.FeAl
-        return [sf.BCC, sf.FCC, sf.B2, sf.D03, sf.random_BCC, sf.random_FCC]
+        return [sf.BCC, sf.B2, sf.D03, sf.random_BCC, sf.FCC, sf.random_FCC]
 
     def _get_job(self, potential, structure_routine, delete_existing_job=False):
         name = self.jobname(potential, structure_routine)
@@ -64,9 +64,9 @@ class ZeroK(HasProject):
             job = self._create_job(name, structure_routine(), potential)
         return job
 
-    def _create_job(self, name, structure, potential):
+    def _create_job(self, name, structure, potential, repeat=2):
         job = self.project.create.job.Lammps(name, delete_existing_job=True)
-        job.structure = structure
+        job.structure = structure.repeat(repeat)
         job.potential = potential
         job.calc_minimize(pressure=0)
         return job
