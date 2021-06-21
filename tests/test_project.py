@@ -9,6 +9,6 @@ class TestProject(TestWithProject):
 
     def test_input(self):
         self.assertListEqual(
-            self.project.input.potentials,
-            self.project.input.potentials_eam + self.project.input.potentials_meam
+            self.project.input.potentials.tolist(),
+            self.project.input.potentials_eam.tolist() + self.project.input.potentials_meam.tolist()
         )

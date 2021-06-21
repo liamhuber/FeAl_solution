@@ -29,6 +29,6 @@ class TestJobName(TestCase):
 
     def test_tags(self):
         self.assertEqual(
-            'foo_min',
-            JobName('foo').min
+            'foo_potl42',
+            JobName('foo').potl(42)
         )
