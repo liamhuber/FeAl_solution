@@ -31,3 +31,4 @@ class TestJobName(TestCase):
         self.assertEqual('foo_potl42', JobName('foo').potl(42))
         self.assertEqual('foo_cAl33_33', JobName('foo').concentration(0.33333333))
         self.assertEqual('foo_reps4', JobName('foo').reps(4))
+        self.assertEqual('foo', JobName('foo').reps(None))

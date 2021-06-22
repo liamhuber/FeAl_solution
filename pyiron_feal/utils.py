@@ -41,10 +41,10 @@ class JobName(str):
 
     def concentration(self, c_Al):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cAl{self._round(c_Al * 100)}')
+        return self if c_Al is None else self.append(f'cAl{self._round(c_Al * 100)}')
 
     def reps(self, n_reps):
-        return self.append(f'reps{n_reps}')
+        return self if n_reps is None else self.append(f'reps{n_reps}')
 
 
 class HasProject:
