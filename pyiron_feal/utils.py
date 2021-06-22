@@ -43,8 +43,11 @@ class JobName(str):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
         return self if c_Al is None else self.append(f'cAl{self._round(c_Al * 100)}')
 
-    def reps(self, n_reps):
-        return self if n_reps is None else self.append(f'reps{n_reps}')
+    def cell_reps(self, n_reps):
+        return self if n_reps is None else self.append(f'cellr{n_reps}')
+
+    def stochastic_reps(self, n_reps):
+        return self if n_reps is None else self.append(f'v{n_reps}')
 
 
 class HasProject:
