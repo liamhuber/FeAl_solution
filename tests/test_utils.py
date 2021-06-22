@@ -30,5 +30,5 @@ class TestJobName(TestCase):
     def test_tags(self):
         self.assertEqual('foo_potl42', JobName('foo').potl(42))
         self.assertEqual('foo_cAl33_33', JobName('foo').concentration(0.33333333))
-        self.assertEqual('foo_reps4', JobName('foo').cell_reps(4))
+        self.assertEqual('foo_cellr4', JobName('foo').cell_reps(4))
         self.assertEqual('foo', JobName('foo').cell_reps(None))
