@@ -2,7 +2,7 @@
 # Copyright (c) Max-Planck-Institut für Eisenforschung GmbH - Computational Materials Design (CM) Department
 # Distributed under the terms of "New BSD License", see the LICENSE file.
 
-from pyiron_feal.utils import HasProject, JobName
+from pyiron_feal.utils import HasProject
 import numpy as np
 from scipy.constants import physical_constants
 KB = physical_constants['Boltzmann constant in eV/K'][0]
@@ -22,19 +22,57 @@ __status__ = "development"
 __date__ = "Jun 10, 2021"
 
 
-class Configurational(HasProject):
-    pass
+# Preliminary 0K results
+ENERGIES_0K = {
+    'E_BCC': (-8.025965/2),
+    'E_form': (-64.749742 - 16*(-8.025965/2))/3,
+    'E_B2': (-8.049821/2),
+    'E_D03': (-64.676110/16)
+}
+
+# Preliminary TILD results
+ENERGIES_523K = {
+    'E_BCC': -4.09748364e+00,
+    'E_form': -3.39912897e-01,
+    'E_B2': -4.06924627e+00,
+    'E_D03': -4.11002069e+00
+}
 
 
-class _EnergyCalculator(HasProject):
+class EnergyCalculator(HasProject):
+    """
+    After conversations with Joerg and Tilmann, I know understand this to be incorrect physics.
+    The key issue is that it compares only per-atom energies, but the Boltzman-weighted probability of occurrence needs
+    to be for the extrinsic amount of material, and so the secondary phases get washed out.
 
-    def __init__(self, project, E_BCC=None, E_form=None, E_B2=None, E_D03=None):
-        """E's should be per-atom energies. Defaults are scraped from a notebook for the Mendelev potential"""
+    Going forward the theory writeup will need to be corrected, but this code I'll just hide behind an underscore and
+    leave around for awhile so we can pull out any useful snippets.
+
+    Usage:
+
+    >>> from from pyiron_feal.subroutines._configurational import EnergyCalculator, ENERGIES_0K, ENERGIES_523K
+    >>> ec = EnergyCalculator(pr, **ENERGIES_523K)
+    >>> temperature_range = np.linspace(100, 1223, 150)
+    >>> concentration_range = np.linspace(0.05, 0.33, 120)
+    >>> cons, fracs = ec.build_phase_fractions(temperature_range, concentration_range)
+    >>> extent = (
+    ...    concentration_range.min(),
+    ...    concentration_range.max(),
+    ...    temperature_range.min(),
+    ...    temperature_range.max()
+    ... )
+    >>> fig, _ = ec.plot_concentrations(cons, extent=extent)
+
+    etc. with the plotting methods.
+    """
+
+    def __init__(self, project, E_BCC, E_form, E_B2, E_D03):
+        """E's should be per-atom energies."""
         super().__init__(project)
-        self.E_BCC = E_BCC or (-8.025965/2)
-        self.E_form = E_form or (-64.749742 - 16*self.E_BCC)/3
-        self.E_B2 = E_B2 or (-8.049821/2)
-        self.E_D03 = E_D03 or (-64.676110/16)
+        self.E_BCC = E_BCC
+        self.E_form = E_form
+        self.E_B2 = E_B2
+        self.E_D03 = E_D03
 
     def G_SS(self, c, T):
         return self.E_BCC + c * self.E_form + KB * T * ((1 - c) * np.log(1 - c) + c * np.log(c))
@@ -44,10 +82,10 @@ class _EnergyCalculator(HasProject):
         return self.E_form + KB * T * np.log(c / (1 - c))
 
     def G_B2(self, c, T):
-        return self.E_B2 + (0.5 - c) * (-self.dmu(c, T))
+        return self.E_B2 - (0.5 - c) * self.dmu(c, T)
 
     def G_D03(self, c, T):
-        return self.E_D03 + (0.25 - c) * (-self.dmu(c, T))
+        return self.E_D03 - (0.25 - c) * self.dmu(c, T)
 
     def X(self, G, T):
         return np.exp(-G / (KB * T))
@@ -163,8 +201,8 @@ class _EnergyCalculator(HasProject):
     def extent_from_arrays(mu_array, temperature_array):
         return [mu_array.min(), mu_array.max(), temperature_array.min(), temperature_array.max()]
 
-    def plot_fractions_1d(self, concentration_range, temperature_range, phase_fractions):
-        i = np.argmin(abs(concentration_range - 0.18))
+    def plot_fractions_1d(self, concentration_range, temperature_range, phase_fractions, nominal_concentration=0.18):
+        i = np.argmin(abs(concentration_range - nominal_concentration))
         pal = sns.color_palette("tab10")
         rgb = [pal[i] for i in [3, 2, 0]]
         expt = self.project.input.experimental_fractions
