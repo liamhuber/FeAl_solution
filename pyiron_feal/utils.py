@@ -40,6 +40,7 @@ class JobName(str):
 
     @self_if_arg_is_none
     def T(self, temperature, ndigits=2):
+        """Temperature."""
         return self.append(f'{round(temperature, ndigits=ndigits)}K')
 
     @self_if_arg_is_none
@@ -53,11 +54,23 @@ class JobName(str):
 
     @self_if_arg_is_none
     def repeat(self, n_reps):
+        """Cell repetition (integer only)."""
         return self.append(f'rep{n_reps}')
 
     @self_if_arg_is_none
     def trial(self, trial):
+        """Stochastic trial repetition."""
         return self.append(f'trl{trial}')
+
+    @self_if_arg_is_none
+    def a(self, a, ndigits=2):
+        """Lattice constant."""
+        return self.append(f'a{round(a, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def P(self, pressure, ndigits=2):
+        """Pressure."""
+        return self.append(f'P{round(pressure, ndigits=ndigits)}')
 
     @property
     def BCC(self):

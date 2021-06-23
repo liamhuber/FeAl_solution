@@ -39,3 +39,5 @@ class TestJobName(TestCase):
         self.assertEqual('foo_rbcc', JobName('foo').random_BCC)
         self.assertEqual('foo_b2', JobName('foo').B2)
         self.assertEqual('foo_d03', JobName('foo').D03)
+        self.assertEqual('foo_P0_0', JobName('foo').P(0.))
+        self.assertEqual('foo_a4_36', JobName('foo').a(4.355))
