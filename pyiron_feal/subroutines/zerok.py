@@ -173,7 +173,7 @@ class ZeroK(HasProject):
                 job = self.project.create.job.minimize.random_BCC(
                     potl_index=potl_index,
                     repeat=reps,
-                    Al_at_frac=c_Al,
+                    c_Al=c_Al,
                     trial=n,
                     delete_existing_job=run_again
                 )

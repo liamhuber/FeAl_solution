@@ -26,7 +26,7 @@ class TestJobFactory(TestWithProject):
             else:
                 self.assertEqual(count, 0)
 
-        job = min_.random_BCC(Al_at_frac=(1/8))
+        job = min_.random_BCC(c_Al=(1 / 8))
         self.assertAlmostEqual((1/8), np.sum(job.structure.get_chemical_symbols() == 'Al') / len(job.structure))
 
         job = min_.B2()

@@ -58,12 +58,12 @@ class _Minimize(HasProject):
         )
 
     def random_BCC(
-            self, potl_index=0, a=None, repeat=2, Al_at_frac=None, pressure=0, trial=None, delete_existing_job=False
+            self, potl_index=0, a=None, repeat=2, c_Al=None, pressure=0, trial=None, delete_existing_job=False
     ):
         return self._lammps_minimization(
             potl_index=potl_index,
-            name=self.name.potl(potl_index).random_BCC.a(a).repeat(repeat).c_Al(Al_at_frac).trial(trial).string,
-            structure=self.project.create.structure.FeAl.random_BCC(a=a, repeat=repeat, Al_at_frac=Al_at_frac),
+            name=self.name.potl(potl_index).random_BCC.a(a).repeat(repeat).c_Al(c_Al).trial(trial).string,
+            structure=self.project.create.structure.FeAl.random_BCC(a=a, repeat=repeat, c_Al=c_Al),
             pressure=pressure,
             delete_existing_job=delete_existing_job
         )
