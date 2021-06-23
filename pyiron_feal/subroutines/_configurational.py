@@ -205,7 +205,7 @@ class EnergyCalculator(HasProject):
         i = np.argmin(abs(concentration_range - nominal_concentration))
         pal = sns.color_palette("tab10")
         rgb = [pal[i] for i in [3, 2, 0]]
-        expt = self.project.input.experimental_fractions
+        expt = self.project.input.experimental_data
         fig, ax = plt.subplots()
         for n, color, label, style_ in zip(range(3), rgb, ['SS', 'B2', 'D03'], ['-', '--', ':']):
             ax.plot(temperature_range, phase_fractions[:, i, n], color=color, label=label, linestyle=style_)
