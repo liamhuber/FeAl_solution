@@ -73,3 +73,59 @@ class _Minimize(HasProject):
             name=self.name.potl(potl_index).D03.a(a).repeat(repeat).string,
             structure=self.project.create.structure.FeAl.D03(a=a).repeat(repeat)
         )
+
+    def dilute(self, potl_index=0, a=None, repeat=2):
+        structure = self.project.create.structure.FeAl.BCC(a=a).repeat(repeat)
+        structure[0] = 'Al'
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name.potl(potl_index).BCC.append('Al').a(a).repeat(repeat).string,
+            structure=structure
+        )
+
+    def B2_anti_Fe_to_Al(self, potl_index=0, a=None, repeat=2):
+        structure = self.project.create.structure.FeAl.B2(a=a).repeat(repeat)
+        structure[0] = 'Al'
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name.potl(potl_index).B2.append('Al').a(a).repeat(repeat).string,
+            structure=structure
+        )
+
+    def B2_anti_Al_to_Fe(self, potl_index=0, a=None, repeat=2):
+        structure = self.project.create.structure.FeAl.B2(a=a).repeat(repeat)
+        structure[1] = 'Fe'
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name.potl(potl_index).B2.append('Fe').a(a).repeat(repeat).string,
+            structure=structure
+        )
+
+    def D03_anti_aFe_to_Al(self, potl_index=0, a=None, repeat=1):
+        structure = self.project.create.structure.FeAl.D03(a=a).repeat(repeat)
+        structure[0] = 'Al'
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name.potl(potl_index).D03.append('aAl').a(a).repeat(repeat).string,
+            structure=structure
+        )
+
+    # The two unique Fe sites were found in a by-hand analysis of the chemistry of the first two neighbour shells and
+    # then a brute-force calculation of the energy which simply confirmed the observed symmetries.
+    def D03_anti_bFe_to_Al(self, potl_index=0, a=None, repeat=1):
+        structure = self.project.create.structure.FeAl.D03(a=a).repeat(repeat)
+        structure[1] = 'Al'
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name.potl(potl_index).D03.append('bAl').a(a).repeat(repeat).string,
+            structure=structure
+        )
+
+    def D03_anti_Al_to_Fe(self, potl_index=0, a=None, repeat=1):
+        structure = self.project.create.structure.FeAl.D03(a=a).repeat(repeat)
+        structure[3] = 'Fe'
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name.potl(potl_index).D03.append('Fe').a(a).repeat(repeat).string,
+            structure=structure
+        )
