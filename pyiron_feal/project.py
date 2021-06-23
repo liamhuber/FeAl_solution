@@ -4,6 +4,7 @@
 
 from pyiron_atomistics import Project as ProjectCore
 from pyiron_feal.factories.structure import StructureFactory
+from pyiron_feal.factories.job import JobFactory
 from pyiron_base import DataContainer
 from pyiron_feal.subroutines import ZeroK
 import numpy as np
@@ -54,6 +55,7 @@ class Project(ProjectCore):
             default_working_directory=default_working_directory
         )
         self.create._structure = StructureFactory()
+        self.create._job_factory = JobFactory(self)
         self._zerok = ZeroK(self)
 
     @property

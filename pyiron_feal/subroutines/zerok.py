@@ -35,7 +35,7 @@ class ZeroK(HasProject):
     def jobname(self, potential, structure_routine, reps=None, concentration=None):
         potl_index = np.argwhere(self.project.input.potentials == potential)[0][0]
         sname = structure_routine.__name__
-        return JobName(f'zerok').potl(potl_index).append(sname).reps(reps).concentration(concentration)
+        return JobName(f'zerok').potl(potl_index).append(sname).reps(reps).c_Al(concentration)
 
     def get_jobs(self, delete_existing_job=False):
         """
