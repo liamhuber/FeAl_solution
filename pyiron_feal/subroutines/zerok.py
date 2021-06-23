@@ -183,6 +183,23 @@ class ZeroK(HasProject):
             print(f"stderr = {actual_err}")
         return reps, actual_err
 
+    def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
+        (fig, ax) = plt.subplots() if ax is None else (None, ax)
+        E_FCC = self.get_FCC_peratom_energy(potl_index=potl_index)
+        E_BCC = self.get_BCC_peratom_energy(potl_index=potl_index)
+        E_D03 = self.get_D03_peratom_energy(potl_index=potl_index)
+        E_B2 = self.get_B2_peratom_energy(potl_index=potl_index)
+
+        c_Al = [0, 0, 0.25, 0.5]
+        energies = [E_FCC, E_BCC, E_D03, E_B2]
+        ax.plot(c_Al, energies, marker='o')
+        if beautify:
+            ax.set_xlabel('$c_\mathrm{Al}$')
+            ax.set_ylabel('$E$ [eV/atom]')
+            for c, E, label in zip(c_Al, energies, ['FCC', 'BCC', 'D03', 'B2']):
+                ax.annotate(label, (c, E))
+        return ax
+
     @property
     def results(self):
         return self._results
