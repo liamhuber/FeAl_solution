@@ -14,6 +14,14 @@ __status__ = "development"
 __date__ = "Jun 10, 2021"
 
 
+def self_if_arg_is_none(fnc):
+    def wrapper(self, arg, **kwargs):
+        if arg is None:
+            return self
+        return fnc(self, arg, **kwargs)
+    return wrapper
+
+
 class JobName(str):
     @staticmethod
     def _filter_string(val):
@@ -22,32 +30,54 @@ class JobName(str):
     def __new__(cls, val):
         return super().__new__(cls, cls._filter_string(val))
 
-    def append(self, other):
-        return JobName(super(JobName, self).__add__('_' + self._filter_string(other)))
-
     @property
     def string(self):
         return str(self)
 
-    @staticmethod
-    def _round(number):
-        return round(number, ndigits=2)
+    @self_if_arg_is_none
+    def append(self, other):
+        return JobName(super(JobName, self).__add__('_' + self._filter_string(other)))
 
-    def T(self, temperature):
-        return self.append(f'{self._round(temperature)}K')
+    @self_if_arg_is_none
+    def T(self, temperature, ndigits=2):
+        return self.append(f'{round(temperature, ndigits=ndigits)}K')
 
+    @self_if_arg_is_none
     def potl(self, potl_index):
         return self.append(f'potl{potl_index}')
 
-    def concentration(self, c_Al):
+    @self_if_arg_is_none
+    def c_Al(self, c_Al, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self if c_Al is None else self.append(f'cAl{self._round(c_Al * 100)}')
+        return self.append(f'cAl{round(c_Al * 100, ndigits=ndigits)}')
 
-    def cell_reps(self, n_reps):
-        return self if n_reps is None else self.append(f'cellr{n_reps}')
+    @self_if_arg_is_none
+    def repeat(self, n_reps):
+        return self.append(f'rep{n_reps}')
 
-    def stochastic_reps(self, n_reps):
-        return self if n_reps is None else self.append(f'v{n_reps}')
+    @self_if_arg_is_none
+    def trial(self, trial):
+        return self.append(f'trl{trial}')
+
+    @property
+    def BCC(self):
+        return self.append('bcc')
+
+    @property
+    def FCC(self):
+        return self.append('fcc')
+
+    @property
+    def random_BCC(self):
+        return self.append('rbcc')
+
+    @property
+    def B2(self):
+        return self.append('b2')
+
+    @property
+    def D03(self):
+        return self.append('d03')
 
 
 class HasProject:

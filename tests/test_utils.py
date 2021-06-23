@@ -27,8 +27,15 @@ class TestJobName(TestCase):
         self.assertEqual('foo_273K', JobName('foo').T(273))
         self.assertEqual('foo_273_0K', JobName('foo').T(273.0))
 
-    def test_tags(self):
+    def test_other_tags(self):
         self.assertEqual('foo_potl42', JobName('foo').potl(42))
-        self.assertEqual('foo_cAl33_33', JobName('foo').concentration(0.33333333))
-        self.assertEqual('foo_cellr4', JobName('foo').cell_reps(4))
-        self.assertEqual('foo', JobName('foo').cell_reps(None))
+        self.assertEqual('foo_cAl33_33', JobName('foo').c_Al(0.33333333))
+        self.assertEqual('foo_cAl33_333', JobName('foo').c_Al(0.33333333, ndigits=3))
+        self.assertEqual('foo_rep4', JobName('foo').repeat(4))
+        self.assertEqual('foo', JobName('foo').repeat(None))
+        self.assertEqual('foo_trl3', JobName('foo').trial(3))
+        self.assertEqual('foo_bcc', JobName('foo').BCC)
+        self.assertEqual('foo_fcc', JobName('foo').FCC)
+        self.assertEqual('foo_rbcc', JobName('foo').random_BCC)
+        self.assertEqual('foo_b2', JobName('foo').B2)
+        self.assertEqual('foo_d03', JobName('foo').D03)
