@@ -54,9 +54,10 @@ class _FeAlStructures:
         struct[manually_identified_Al_sites] = 'Al'
         return struct
 
-    def random_BCC(self, a=None, repeat=2):
+    def random_BCC(self, a=None, repeat=2, Al_at_frac=None):
+        Al_at_frac = self._Al_at_frac if Al_at_frac is None else Al_at_frac
         struct = self.BCC(a=a).repeat(repeat)
-        n_Al = round(self._Al_at_frac * len(struct))
+        n_Al = round(Al_at_frac * len(struct))
         struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
         return struct
 
@@ -73,8 +74,9 @@ class _FeAlStructures:
         d_1NN = self.BCC().get_neighbors(num_neighbors=1, id_list=[0]).distances[0, 0]
         return d_1NN * np.sqrt(2)
 
-    def random_FCC(self, a=None, repeat=2):
+    def random_FCC(self, a=None, repeat=2, Al_at_frac=None):
+        Al_at_frac = self._Al_at_frac if Al_at_frac is None else Al_at_frac
         struct = self.FCC(a=a).repeat(repeat)
-        n_Al = round(self._Al_at_frac * len(struct))
+        n_Al = round(Al_at_frac * len(struct))
         struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
         return struct

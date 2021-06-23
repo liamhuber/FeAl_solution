@@ -39,6 +39,16 @@ class JobName(str):
     def potl(self, potl_index):
         return self.append(f'potl{potl_index}')
 
+    def concentration(self, c_Al):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self if c_Al is None else self.append(f'cAl{self._round(c_Al * 100)}')
+
+    def cell_reps(self, n_reps):
+        return self if n_reps is None else self.append(f'cellr{n_reps}')
+
+    def stochastic_reps(self, n_reps):
+        return self if n_reps is None else self.append(f'v{n_reps}')
+
 
 class HasProject:
     def __init__(self, project):

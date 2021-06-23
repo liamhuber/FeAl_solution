@@ -51,6 +51,13 @@ class TestStructureFactory(TestCase):
             places=1,
             msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {self.sf._Al_at_frac}."
         )
+        random2 = self.sf.random_BCC(a=1, repeat=4, Al_at_frac=0.25)
+        self.assertAlmostEqual(
+            1,
+            0.25 / self._get_frac_Al(random2),
+            places=1,
+            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {0.25}."
+        )
 
     def test_random_fcc(self):
         random = self.sf.random_FCC(repeat=3)
@@ -59,4 +66,11 @@ class TestStructureFactory(TestCase):
             self.sf._Al_at_frac / self._get_frac_Al(random),
             places=1,
             msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {self.sf._Al_at_frac}."
+        )
+        random2 = self.sf.random_FCC(a=1, repeat=4, Al_at_frac=0.25)
+        self.assertAlmostEqual(
+            1,
+            0.25 / self._get_frac_Al(random2),
+            places=1,
+            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {0.25}."
         )

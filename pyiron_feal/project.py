@@ -32,6 +32,12 @@ class ProjectInput(DataContainer):
             '2010--Lee-E--Fe-Al--LAMMPS--ipr1',
             '2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2',
         ])
+        self.experimental_fractions = {
+            'T': 523,
+            'SS': 1 - (0.0042 + 0.1232),
+            'B2': 0.0042,
+            'D03': 0.1232
+        }
 
     @property
     def potentials(self):
