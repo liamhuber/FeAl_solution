@@ -194,3 +194,9 @@ class ZeroK(HasProject):
             for c, E, label in zip(c_Al, energies, ['FCC', 'BCC', 'D03', 'B2']):
                 ax.annotate(label, (c, E))
         return ax
+
+    def get_dmu_0K(self, potl_index=0, run_again=False, **other_job_kwargs):
+        E_BCC = self.get_BCC_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs)
+        E_B2 = self.get_B2_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs)
+        delta_c = 0.25 - 0
+        return (E_B2 - E_BCC) / delta_c
