@@ -195,8 +195,15 @@ class ZeroK(HasProject):
                 ax.annotate(label, (c, E))
         return ax
 
-    def get_dmu_0K(self, potl_index=0, run_again=False, **other_job_kwargs):
+    def get_dmu_0K(self, c_Al=0.18, potl_index=0, run_again=False, **other_job_kwargs):
         E_BCC = self.get_BCC_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs)
+        E_D03 = self.get_D03_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs)
         E_B2 = self.get_B2_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs)
-        delta_c = 0.25 - 0
-        return (E_B2 - E_BCC) / delta_c
+        delta_c = 0.25
+        if c_Al <= 0.25:
+            return (E_D03 - E_BCC) / delta_c
+        elif c_Al <= 0.5:
+            return (E_B2 - E_D03) / delta_c
+        else:
+            raise ValueError(f"0K chemical potential only defined for Al concentrations <= 0.5, but got {c_Al}")
+
