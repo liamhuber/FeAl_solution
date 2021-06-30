@@ -53,6 +53,11 @@ class JobName(str):
         return self.append(f'cAl{round(c_Al * 100, ndigits=ndigits)}')
 
     @self_if_arg_is_none
+    def c_D03_anti_Al_to_Fe(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cDAl2Fe{round(c_antisites * 100, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
     def repeat(self, n_reps):
         """Cell repetition (integer only)."""
         return self.append(f'rep{n_reps}')

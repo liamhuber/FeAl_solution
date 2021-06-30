@@ -202,6 +202,36 @@ class ZeroK(HasProject):
                 energies[i, n] = job.output.energy_pot[-1] / len(job.structure)
         return c_Al, energies
 
+    @lru_cache()
+    def get_nondilute_antisite_Al_to_Fe_energies(
+            self, c_antisite_max=0.25, repeat=1, potl_index=0, stderr=1e-3, run_again=False, n_trials=10
+    ):
+        converged_reps, _, _ = self.get_solid_solution_repeats(
+            potl_index=potl_index, stderr=stderr, run_again=run_again, n_trials=n_trials
+        )
+        converged_reps = (converged_reps + (converged_reps % 2)) / 2  # Since D03 is double-size by default
+        repeat = int(max(converged_reps, repeat))
+        print(f"Repeat={repeat}")
+
+        n_antisites = len(self.project.create.structure.FeAl.random_D03_antisites_Al_to_Fe(repeat=repeat)) \
+                      * self.project.create.structure.FeAl.D03_fractions.Al
+        c_antisites = (np.arange(n_antisites) + 1) / n_antisites
+        c_antisites = c_antisites[c_antisites <= c_antisite_max]
+
+        energies = np.nan * np.ones((len(c_antisites), n_trials))
+        for i, c in enumerate(c_antisites):
+            for n in np.arange(n_trials):
+                job = self.project.create.job.minimize.random_BCC(
+                    potl_index=potl_index,
+                    repeat=repeat,
+                    c_Al=c,
+                    trial=n,
+                    delete_existing_job=run_again
+                )
+                job.run()
+                energies[i, n] = job.output.energy_pot[-1] / len(job.structure)
+        return c_antisites, energies
+
     def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
         (fig, ax) = plt.subplots() if ax is None else (None, ax)
         E_FCC = self.get_FCC_peratom_energy(potl_index=potl_index)

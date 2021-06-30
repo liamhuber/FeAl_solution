@@ -153,3 +153,16 @@ class _Minimize(HasProject):
             pressure=pressure,
             delete_existing_job=delete_existing_job
         )
+
+    def random_D03_antisites_Al_to_Fe(
+            self, potl_index=0, a=None, repeat=2, c_antisites=None, pressure=0, trial=None, delete_existing_job=False
+    ):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name.potl(potl_index).random_BCC.a(a).repeat(repeat).c_D03_anti_Al_to_Fe(c_antisites).trial(trial).string,
+            structure=self.project.create.structure.FeAl.random_D03_antisites_Al_to_Fe(
+                a=a, repeat=repeat, c_antisites=c_antisites
+            ),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
