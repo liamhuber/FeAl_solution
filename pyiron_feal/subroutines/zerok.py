@@ -173,7 +173,6 @@ class ZeroK(HasProject):
                 job.run()
                 energies.append(job.output.energy_pot[-1] / len(job.structure))
             actual_err = np.std(energies) / np.sqrt(n_trials)
-            print(f"stderr = {actual_err}")
         return reps, actual_err, n_trials
 
     def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
