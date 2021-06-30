@@ -214,7 +214,7 @@ class ZeroK(HasProject):
         print(f"Repeat={repeat}")
 
         n_antisites = len(self.project.create.structure.FeAl.random_D03_antisites_Al_to_Fe(repeat=repeat)) \
-                      * self.project.create.structure.FeAl.D03_fractions.Al
+                      * self.project.create.structure.FeAl.d03_fractions.Al
         c_antisites = (np.arange(n_antisites) + 1) / n_antisites
         c_antisites = c_antisites[c_antisites <= c_antisite_max]
 
@@ -292,7 +292,7 @@ class ZeroK(HasProject):
         d03_Al_to_Fe = self.get_D03_antisite_Al_to_Fe_energy(potl_index=potl_index)[0]
         d03_aFe_to_Al = self.get_D03_antisite_aFe_to_Al_energy(potl_index=potl_index)[0]
         d03_bFe_to_Al = self.get_D03_antisite_bFe_to_Al_energy(potl_index=potl_index)[0]
-        sf = self.project.create.structure.FeAl.D03_fractions
+        sf = self.project.create.structure.FeAl.d03_fractions
         G_D03_low_Al = self._G_dilute_mixing(d03, (0.25 - c_range), d03_Al_to_Fe, temperature, site_fraction=sf.Al)
         if d03_bFe_to_Al < d03_aFe_to_Al:
             form_hi, frac_hi, form_vhi, frac_vhi = d03_bFe_to_Al, sf.bFe, d03_aFe_to_Al, sf.aFe
