@@ -98,7 +98,7 @@ class ZeroK(HasProject):
         )
 
     @lru_cache()
-    def get_B2_antisite_energy_Fe_to_Al(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
+    def get_B2_antisite_Fe_to_Al_energy(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
         return self._get_size_converged_point_defect_energy(
             self.get_B2_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs),
             self.project.create.job.minimize.B2_anti_Fe_to_Al,
@@ -109,7 +109,7 @@ class ZeroK(HasProject):
         )
 
     @lru_cache()
-    def get_B2_antisite_energy_Al_to_Fe(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
+    def get_B2_antisite_Al_to_Fe_energy(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
         return self._get_size_converged_point_defect_energy(
             self.get_B2_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs),
             self.project.create.job.minimize.B2_anti_Al_to_Fe,
@@ -120,7 +120,7 @@ class ZeroK(HasProject):
         )
 
     @lru_cache()
-    def get_D03_antisite_energy_Al_to_Fe(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
+    def get_D03_antisite_Al_to_Fe_energy(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
         return self._get_size_converged_point_defect_energy(
             self.get_D03_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs),
             self.project.create.job.minimize.D03_anti_Al_to_Fe,
@@ -131,7 +131,7 @@ class ZeroK(HasProject):
         )
 
     @lru_cache()
-    def get_D03_antisite_energy_aFe_to_Al(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
+    def get_D03_antisite_aFe_to_Al_energy(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
         return self._get_size_converged_point_defect_energy(
             self.get_D03_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs),
             self.project.create.job.minimize.D03_anti_aFe_to_Al,
@@ -142,7 +142,7 @@ class ZeroK(HasProject):
         )
 
     @lru_cache()
-    def get_D03_antisite_energy_bFe_to_Al(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
+    def get_D03_antisite_bFe_to_Al_energy(self, potl_index=0, stderr=1e-3, run_again=False, **other_job_kwargs):
         return self._get_size_converged_point_defect_energy(
             self.get_D03_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs),
             self.project.create.job.minimize.D03_anti_bFe_to_Al,
@@ -176,7 +176,7 @@ class ZeroK(HasProject):
         return reps, actual_err, n_trials
 
     @lru_cache()
-    def get_solid_solution_profile(
+    def get_nondilute_formation_energies(
             self, c_Al_max=0.25, repeat=1, potl_index=0, stderr=1e-3, run_again=False, n_trials=10
     ):
         converged_reps, _, _ = self.get_solid_solution_repeats(
@@ -259,9 +259,9 @@ class ZeroK(HasProject):
         G_BCC = self._G_dilute_mixing(bcc, c_range, form, temperature)
 
         d03 = self.get_D03_peratom_energy(potl_index=potl_index)
-        d03_Al_to_Fe = self.get_D03_antisite_energy_Al_to_Fe(potl_index=potl_index)[0]
-        d03_aFe_to_Al = self.get_D03_antisite_energy_aFe_to_Al(potl_index=potl_index)[0]
-        d03_bFe_to_Al = self.get_D03_antisite_energy_bFe_to_Al(potl_index=potl_index)[0]
+        d03_Al_to_Fe = self.get_D03_antisite_Al_to_Fe_energy(potl_index=potl_index)[0]
+        d03_aFe_to_Al = self.get_D03_antisite_aFe_to_Al_energy(potl_index=potl_index)[0]
+        d03_bFe_to_Al = self.get_D03_antisite_bFe_to_Al_energy(potl_index=potl_index)[0]
         sf = self.project.create.structure.FeAl.D03_fractions
         G_D03_low_Al = self._G_dilute_mixing(d03, (0.25 - c_range), d03_Al_to_Fe, temperature, site_fraction=sf.Al)
         if d03_bFe_to_Al < d03_aFe_to_Al:
@@ -279,8 +279,8 @@ class ZeroK(HasProject):
         )
 
         b2 = self.get_B2_peratom_energy(potl_index=potl_index)
-        b2_Al_to_Fe = self.get_B2_antisite_energy_Al_to_Fe(potl_index=potl_index)[0]
-        b2_Fe_to_Al = self.get_B2_antisite_energy_Fe_to_Al(potl_index=potl_index)[0]
+        b2_Al_to_Fe = self.get_B2_antisite_Al_to_Fe_energy(potl_index=potl_index)[0]
+        b2_Fe_to_Al = self.get_B2_antisite_Fe_to_Al_energy(potl_index=potl_index)[0]
         G_B2_low_Al = self._G_dilute_mixing(b2, (0.5 - c_range), b2_Al_to_Fe, temperature, site_fraction=0.5)
         G_B2_hi_Al = self._G_dilute_mixing(b2, (c_range - 0.5), b2_Fe_to_Al, temperature, site_fraction=0.5)
         G_B2 = np.nan_to_num(G_B2_low_Al, nan=0) + np.nan_to_num(G_B2_hi_Al, nan=0)
