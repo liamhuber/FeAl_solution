@@ -175,6 +175,33 @@ class ZeroK(HasProject):
             actual_err = np.std(energies) / np.sqrt(n_trials)
         return reps, actual_err, n_trials
 
+    @lru_cache()
+    def get_solid_solution_profile(
+            self, c_Al_max=0.25, repeat=1, potl_index=0, stderr=1e-3, run_again=False, n_trials=10
+    ):
+        converged_reps, _, _ = self.get_solid_solution_repeats(
+            potl_index=potl_index, stderr=stderr, run_again=run_again, n_trials=n_trials
+        )
+        repeat = max(converged_reps, repeat)
+
+        n_atoms = len(self.project.create.structure.FeAl.random_BCC(repeat=repeat))
+        c_Al = (np.arange(n_atoms) + 1) / n_atoms
+        c_Al = c_Al[c_Al <= c_Al_max]
+
+        energies = np.nan * np.ones((len(c_Al), n_trials))
+        for i, c in enumerate(c_Al):
+            for n in np.arange(n_trials):
+                job = self.project.create.job.minimize.random_BCC(
+                    potl_index=potl_index,
+                    repeat=repeat,
+                    c_Al=c,
+                    trial=n,
+                    delete_existing_job=run_again
+                )
+                job.run()
+                energies[i, n] = job.output.energy_pot[-1] / len(job.structure)
+        return c_Al, energies
+
     def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
         (fig, ax) = plt.subplots() if ax is None else (None, ax)
         E_FCC = self.get_FCC_peratom_energy(potl_index=potl_index)
