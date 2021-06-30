@@ -161,10 +161,8 @@ class ZeroK(HasProject):
             reps += 1
             if int(2 * reps ** 3 * c_Al) < 1:
                 continue
-            print(f"running {reps} repetitions...")
             energies = []
             for n in range(n_trials):
-                print(f"\ttrial {n}")
                 job = self.project.create.job.minimize.random_BCC(
                     potl_index=potl_index,
                     repeat=reps,
