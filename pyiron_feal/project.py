@@ -69,5 +69,5 @@ class Project(ProjectCore):
             return self.data.input
 
     @property
-    def ZeroK(self):
+    def zerok(self):
         return self._zerok
