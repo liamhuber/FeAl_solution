@@ -54,6 +54,11 @@ class _FeAlStructures:
         struct[manually_identified_Al_sites] = 'Al'
         return struct
 
+    @property
+    def D03_fractions(self):
+        """Fractions of the unit cell for each unique site type, aFe, bFe, and Al."""
+        return _D03Fractions()
+
     def random_BCC(self, a=None, repeat=2, c_Al=None):
         c_Al = self._c_Al if c_Al is None else c_Al
         struct = self.BCC(a=a).repeat(repeat)
@@ -80,3 +85,17 @@ class _FeAlStructures:
         n_Al = round(c_Al * len(struct))
         struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
         return struct
+
+
+class _D03Fractions:
+    @property
+    def Al(self):
+        return 0.25
+
+    @property
+    def aFe(self):
+        return 0.5
+
+    @property
+    def bFe(self):
+        return 0.25
