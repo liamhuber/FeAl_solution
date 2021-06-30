@@ -174,7 +174,7 @@ class ZeroK(HasProject):
                 energies.append(job.output.energy_pot[-1] / len(job.structure))
             actual_err = np.std(energies) / np.sqrt(n_trials)
             print(f"stderr = {actual_err}")
-        return reps, actual_err
+        return reps, actual_err, n_trials
 
     def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
         (fig, ax) = plt.subplots() if ax is None else (None, ax)
@@ -205,3 +205,65 @@ class ZeroK(HasProject):
         else:
             raise ValueError(f"0K chemical potential only defined for Al concentrations <= 0.5, but got {c_Al}")
 
+    @staticmethod
+    def S_ideal_mixing(c, site_fraction=1):
+        if np.isclose(c, 0) or np.isclose(c, 1):
+            return 0
+        c = c / site_fraction
+        return -site_fraction * KB * ((1 - c) * np.log(1 - c) + c * np.log(c))
+
+    def _G_dilute_mixing(self, ideal_energy, defect_concentration, defect_energy, temperature, site_fraction=1):
+        return (
+                ideal_energy
+                + defect_concentration * defect_energy
+                - temperature * self.S_ideal_mixing(defect_concentration, site_fraction=site_fraction)
+        )
+
+    def plot_G_0K_point_defects(self, temperature=523, c_range=None, potl_index=0, ax=None, beautify=True):
+        """
+        Assumes no stoichiometry-neutral swaps and that the Fe-rich D03 phase first fills all of the Fe site with the
+        lower potential energy cost for swaping to Al, then proceeds to fill the more expensive sites. It's assumed that
+        the potential energy cost dominates the extra entropy from one site having double the degeneracy of the other.
+        """
+        (fig, ax) = plt.subplots() if ax is None else (None, ax)
+        c_range = np.linspace(0, 1, 200) if c_range is None else c_range
+
+        bcc = self.get_BCC_peratom_energy(potl_index=potl_index)
+        form = self.get_formation_energy(potl_index=potl_index)[0]
+        G_BCC = self._G_dilute_mixing(bcc, c_range, form, temperature)
+
+        d03 = self.get_D03_peratom_energy(potl_index=potl_index)
+        d03_Al_to_Fe = self.get_D03_antisite_energy_Al_to_Fe(potl_index=potl_index)[0]
+        d03_aFe_to_Al = self.get_D03_antisite_energy_aFe_to_Al(potl_index=potl_index)[0]
+        d03_bFe_to_Al = self.get_D03_antisite_energy_bFe_to_Al(potl_index=potl_index)[0]
+        sf = self.project.create.structure.FeAl.D03_fractions
+        G_D03_low_Al = self._G_dilute_mixing(d03, (0.25 - c_range), d03_Al_to_Fe, temperature, site_fraction=sf.Al)
+        if d03_bFe_to_Al < d03_aFe_to_Al:
+            form_hi, frac_hi, form_vhi, frac_vhi = d03_bFe_to_Al, sf.bFe, d03_aFe_to_Al, sf.aFe
+        else:
+            form_hi, frac_hi, form_vhi, frac_vhi = d03_aFe_to_Al, sf.aFe, d03_bFe_to_Al, sf.bFe
+        G_D03_hi_Al = self._G_dilute_mixing(d03, (c_range - 0.25), form_hi, temperature, site_fraction=frac_hi)
+        G_D03_very_hi_Al = self._G_dilute_mixing(
+            d03 + frac_hi * form_hi, (c_range - (0.25 + frac_hi)), form_vhi, temperature, site_fraction=frac_vhi
+        )
+        G_D03 = (
+                np.nan_to_num(G_D03_low_Al, nan=0)
+                + np.nan_to_num(G_D03_hi_Al, nan=0)
+                + np.nan_to_num(G_D03_very_hi_Al, nan=0)
+        )
+
+        b2 = self.get_B2_peratom_energy(potl_index=potl_index)
+        b2_Al_to_Fe = self.get_B2_antisite_energy_Al_to_Fe(potl_index=potl_index)[0]
+        b2_Fe_to_Al = self.get_B2_antisite_energy_Fe_to_Al(potl_index=potl_index)[0]
+        G_B2_low_Al = self._G_dilute_mixing(b2, (0.5 - c_range), b2_Al_to_Fe, temperature, site_fraction=0.5)
+        G_B2_hi_Al = self._G_dilute_mixing(b2, (c_range - 0.5), b2_Fe_to_Al, temperature, site_fraction=0.5)
+        G_B2 = np.nan_to_num(G_B2_low_Al, nan=0) + np.nan_to_num(G_B2_hi_Al, nan=0)
+
+        ax.plot(c_range, G_BCC, label='BCC')
+        ax.plot(c_range, G_D03, label='D03')
+        ax.plot(c_range, G_B2, label='B2')
+        if beautify:
+            ax.set_xlabel('$c_\mathrm{Al}$')
+            ax.set_ylabel('$G_\mathrm{phase}$ [eV]')
+            fig.legend()
+        return ax
