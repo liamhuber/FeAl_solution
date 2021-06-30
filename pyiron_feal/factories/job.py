@@ -159,7 +159,7 @@ class _Minimize(HasProject):
     ):
         return self._lammps_minimization(
             potl_index=potl_index,
-            name=self.name.potl(potl_index).random_BCC.a(a).repeat(repeat).c_D03_anti_Al_to_Fe(c_antisites).trial(trial).string,
+            name=self.name.potl(potl_index).D03.a(a).repeat(repeat).c_D03_anti_Al_to_Fe(c_antisites).trial(trial).string,
             structure=self.project.create.structure.FeAl.random_D03_antisites_Al_to_Fe(
                 a=a, repeat=repeat, c_antisites=c_antisites
             ),
