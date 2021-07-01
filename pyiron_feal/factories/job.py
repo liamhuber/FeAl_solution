@@ -39,6 +39,106 @@ class _Minimize(HasProject):
         job.calc_minimize(pressure=pressure)
         return job
 
+    def bcc(self, potl_index=0, a=None, repeat=1, trial=None, pressure=0, delete_existing_job=False, c_Al=None):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                bcc=True,
+                a=a,
+                repeat=repeat,
+                trial=trial,
+                pressure=pressure,
+                c_Al=c_Al
+            ),
+            structure=self.project.create.structure.FeAl.bcc(a=a, repeat=repeat, c_Al=c_Al),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
+
+    def d03(
+            self,
+            potl_index=0,
+            a=None,
+            repeat=1,
+            trial=None,
+            pressure=0,
+            delete_existing_job=False,
+            c_D03_anti_Al_to_Fe=None,
+            c_D03_anti_aFe_to_Al=None,
+            c_D03_anti_bFe_to_Al=None
+    ):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                d03=True,
+                a=a,
+                repeat=repeat,
+                trial=trial,
+                pressure=pressure,
+                c_D03_anti_Al_to_Fe=c_D03_anti_Al_to_Fe,
+                c_D03_anti_aFe_to_Al=c_D03_anti_aFe_to_Al,
+                c_D03_anti_bFe_to_Al=c_D03_anti_bFe_to_Al
+            ),
+            structure=self.project.create.structure.FeAl.d03(
+                a=a,
+                repeat=repeat,
+                c_D03_anti_Al_to_Fe=c_D03_anti_Al_to_Fe,
+                c_D03_anti_aFe_to_Al=c_D03_anti_aFe_to_Al,
+                c_D03_anti_bFe_to_Al=c_D03_anti_bFe_to_Al
+            ),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
+
+    def b2(
+            self,
+            potl_index=0,
+            a=None,
+            repeat=1,
+            trial=None,
+            pressure=0,
+            delete_existing_job=False,
+            c_B2_anti_Al_to_Fe=None,
+            c_B2_anti_Fe_to_Al=None,
+    ):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                b2=True,
+                a=a,
+                repeat=repeat,
+                trial=trial,
+                pressure=pressure,
+                c_B2_anti_Al_to_Fe=c_B2_anti_Al_to_Fe,
+                c_B2_anti_Fe_to_Al=c_B2_anti_Fe_to_Al,
+            ),
+            structure=self.project.create.structure.FeAl.b2(
+                a=a, repeat=repeat, c_B2_anti_Al_to_Fe=c_B2_anti_Al_to_Fe, c_B2_anti_Fe_to_Al=c_B2_anti_Fe_to_Al
+            ),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
+
+    def fcc(self, potl_index=0, a=None, repeat=1, trial=None, pressure=0, delete_existing_job=False, c_Al=None):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                fcc=True,
+                a=a,
+                repeat=repeat,
+                trial=trial,
+                pressure=pressure,
+                c_Al=c_Al
+            ),
+            structure=self.project.create.structure.FeAl.fcc(a=a, repeat=repeat, c_Al=c_Al),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
+
     def BCC(self, potl_index=0, a=None, repeat=1, pressure=0, delete_existing_job=False):
         return self._lammps_minimization(
             potl_index=potl_index,
