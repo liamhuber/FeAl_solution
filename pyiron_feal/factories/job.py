@@ -36,7 +36,7 @@ class _Minimize(HasProject):
         job = self.project.create.job.Lammps(name, delete_existing_job=delete_existing_job)
         job.structure = structure
         job.potential = self.project.input.potentials[potl_index]
-        job.calc_minimize(pressure=pressure)
+        job.calc_minimize(pressure=pressure, n_print=1e5)
         return job
 
     def bcc(self, potl_index=0, a=None, repeat=1, trial=None, pressure=0, delete_existing_job=False, c_Al=None):
