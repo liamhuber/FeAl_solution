@@ -57,3 +57,4 @@ class TestJobName(TestCase):
                 ndigits=1
             )
         )
+        self.assertEqual('foo', name.string, msg="Calling shouldn't overwrite the base object.")
