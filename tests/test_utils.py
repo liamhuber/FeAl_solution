@@ -45,14 +45,14 @@ class TestJobName(TestCase):
     def test_call(self):
         name = JobName('foo')
         self.assertEqual(
-            'foo_potl42_bcc_rep4_trl3_P0_0_273K_cDAl2Fe11_1',
+            'foo_potl42_bcc_rep4_trl3_273K_P0_0_cDAl2Fe11_1',
             name(
                 potl_index=42,
                 bcc=True,
                 repeat=4,
                 trial=3,
-                pressure=0.,
                 temperature=273,
+                pressure=0.,
                 c_D03_anti_Al_to_Fe=0.1111111,
                 ndigits=1
             )

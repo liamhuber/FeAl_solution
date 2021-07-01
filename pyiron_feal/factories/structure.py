@@ -57,15 +57,6 @@ class _FeAlStructures:
         structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Al')
         return structure
 
-    def b2(self, a=None, repeat=1, c_Fe2Al=0, c_Al2Fe=0):
-        structure = self._double_unit(a=a)
-        structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
-        structure = structure.repeat(repeat)
-        n = len(structure)
-        structure = self._random_species_change(structure, np.arange(0, n + 1, 2, dtype='int'), c_Fe2Al, 'Al')
-        structure = self._random_species_change(structure, np.arange(1, n, 2, dtype='int'), c_Al2Fe, 'Fe')
-        return structure
-
     @property
     def d03_fractions(self):
         """Fractions of the unit cell for each unique site type, aFe, bFe, and Al."""
@@ -92,6 +83,15 @@ class _FeAlStructures:
         structure = self._random_species_change(structure, Al_ids, c_Al2Fe, 'Fe')
         structure = self._random_species_change(structure, aFe_ids, c_aFe2Al, 'Al')
         structure = self._random_species_change(structure, bFe_ids, c_bFe2Al, 'Al')
+        return structure
+
+    def b2(self, a=None, repeat=1, c_Fe2Al=0, c_Al2Fe=0):
+        structure = self._double_unit(a=a)
+        structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
+        structure = structure.repeat(repeat)
+        n = len(structure)
+        structure = self._random_species_change(structure, np.arange(0, n + 1, 2, dtype='int'), c_Fe2Al, 'Al')
+        structure = self._random_species_change(structure, np.arange(1, n, 2, dtype='int'), c_Al2Fe, 'Fe')
         return structure
 
     @property
