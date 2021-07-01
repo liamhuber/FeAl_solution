@@ -40,6 +40,7 @@ class TestJobName(TestCase):
         self.assertEqual('foo_d03', JobName('foo').d03)
         self.assertEqual('foo_P0_0', JobName('foo').P(0.))
         self.assertEqual('foo_a4_36', JobName('foo').a(4.355))
+        self.assertEqual('foo_cDAl2Fedil', JobName('foo').c_D03_anti_Al_to_Fe('Dilute'))
 
     def test_call(self):
         name = JobName('foo')

@@ -145,35 +145,41 @@ class JobName(str):
         """Pressure."""
         return self.append(f'P{round(pressure, ndigits=ndigits)}')
 
+    def _concentration(self, c, ndigits=2):
+        try:
+            return round(c * 100, ndigits=ndigits)
+        except TypeError:
+            return c.lower()[:3]
+
     @self_if_arg_is_none
     def c_Al(self, c_Al, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cAl{round(c_Al * 100, ndigits=ndigits)}')
+        return self.append(f'cAl{self._concentration(c_Al, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_D03_anti_Al_to_Fe(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cDAl2Fe{round(c_antisites * 100, ndigits=ndigits)}')
+        return self.append(f'cDAl2Fe{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_D03_anti_aFe_to_Al(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cDaFe2Al{round(c_antisites * 100, ndigits=ndigits)}')
+        return self.append(f'cDaFe2Al{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_D03_anti_bFe_to_Al(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cDbFe2Al{round(c_antisites * 100, ndigits=ndigits)}')
+        return self.append(f'cDbFe2Al{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_B2_anti_Al_to_Fe(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cBAl2Fe{round(c_antisites * 100, ndigits=ndigits)}')
+        return self.append(f'cBAl2Fe{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_B2_anti_Fe_to_Al(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cBFe2Al{round(c_antisites * 100, ndigits=ndigits)}')
+        return self.append(f'cBFe2Al{self._concentration(c_antisites, ndigits=ndigits)}')
 
 
 class HasProject:
