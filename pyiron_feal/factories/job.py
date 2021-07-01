@@ -28,16 +28,24 @@ class JobFactory(JobFactoryCore):
 
 
 class _Minimize(HasProject):
+    """
+    Not strictly job creation routines -- if the job already exists its HDF path is returned instead.
+    """
+
     def __init__(self, project):
         super().__init__(project)
         self.name = JobName('min')
 
     def _lammps_minimization(self, potl_index, name, structure, pressure, delete_existing_job=False):
-        job = self.project.create.job.Lammps(name, delete_existing_job=delete_existing_job)
-        job.structure = structure
-        job.potential = self.project.input.potentials[potl_index]
-        job.calc_minimize(pressure=pressure, n_print=1e5)
-        return job
+        hdf_path = self.project.inspect(name)
+        if hdf_path is None or delete_existing_job:
+            job = self.project.create.job.Lammps(name, delete_existing_job=delete_existing_job)
+            job.structure = structure
+            job.potential = self.project.input.potentials[potl_index]
+            job.calc_minimize(pressure=pressure, n_print=1e5)
+            return job
+        else:
+            return hdf_path
 
     def bcc(self, potl_index=0, a=None, repeat=1, trial=None, pressure=0, delete_existing_job=False, c_Al=None):
         return self._lammps_minimization(

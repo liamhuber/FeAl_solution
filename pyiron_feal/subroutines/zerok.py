@@ -5,6 +5,7 @@
 from pyiron_feal.utils import HasProject
 import numpy as np
 from functools import lru_cache
+from pyiron_base import GenericJob
 from scipy.constants import physical_constants
 KB = physical_constants['Boltzmann constant in eV/K'][0]
 import matplotlib.pyplot as plt
@@ -25,10 +26,17 @@ __date__ = "Jun 10, 2021"
 class ZeroK(HasProject):
 
     @staticmethod
-    def _get_peratom_energy(job_creator, potl_index=0, run_again=False, **other_job_kwargs):
+    def _get_energy_and_size(job_creator, potl_index=0, run_again=False, **other_job_kwargs):
         job = job_creator(potl_index=potl_index, delete_existing_job=run_again, **other_job_kwargs)
-        job.run()
-        return job.output.energy_pot[-1] / len(job.structure)
+        if isinstance(job, GenericJob):
+            job.run()
+            return job.output.energy_pot[-1], len(job.structure)
+        else:
+            return job['output/generic/energy_pot'][-1], len(job['output/structure/indices'])
+
+    def _get_peratom_energy(self, job_creator, potl_index=0, run_again=False, **other_job_kwargs):
+        e, n = self._get_energy_and_size(job_creator, potl_index=potl_index, run_again=run_again, **other_job_kwargs)
+        return e / n
 
     @lru_cache()
     def get_bcc_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
@@ -60,7 +68,7 @@ class ZeroK(HasProject):
     @lru_cache()
     def get_d03_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
         return self._get_peratom_energy(
-            self.project.create.job.minimize.D03,
+            self.project.create.job.minimize.d03,
             potl_index=potl_index,
             run_again=run_again,
             **other_job_kwargs
@@ -83,23 +91,21 @@ class ZeroK(HasProject):
                 ax.annotate(label, (c, E))
         return ax
 
-    @staticmethod
     def _get_size_converged_point_defect_energy(
-            ref_energy_per_atom, job_creator, stderr=1e-3, potl_index=0, run_again=False, **other_job_kwargs
+            self, ref_energy_per_atom, job_creator, stderr=1e-3, potl_index=0, run_again=False, **other_job_kwargs
     ):
         reps = 0
         actual_err = np.inf
         energies = [np.inf]
         while actual_err > stderr:
             reps += 1
-            job = job_creator(
+            e, n = self._get_energy_and_size(
+                job_creator,
                 potl_index=potl_index,
-                repeat=reps,
-                delete_existing_job=run_again,
+                run_again=run_again,
                 **other_job_kwargs
             )
-            job.run()
-            energies.append(job.output.energy_pot[-1] - len(job.structure) * ref_energy_per_atom)
+            energies.append(e - n * ref_energy_per_atom)
             actual_err = np.abs(energies[-1] - energies[-2])
         return energies[-1], reps, actual_err
 
@@ -255,20 +261,21 @@ class ZeroK(HasProject):
 
             energies = []
             for n in range(n_trials):
-                job = self.project.create.job.minimize.bcc(
-                    potl_index=potl_index,
-                    repeat=reps,
-                    c_Al=c_Al,
-                    trial=n,
-                    delete_existing_job=run_again
+                energies.append(
+                    self._get_peratom_energy(
+                        self.project.create.job.minimize.bcc,
+                        potl_index=potl_index,
+                        run_again=run_again,
+                        repeat=reps,
+                        c_Al=c_Al,
+                        trial=n,
+                    )
                 )
-                job.run()
-                energies.append(job.output.energy_pot[-1] / len(job.structure))
             actual_err = np.std(energies) / np.sqrt(n_trials)
         return reps, actual_err, n_trials
 
     @lru_cache()
-    def get_formation_energies(
+    def get_bcc_solution_energies(
             self, c_Al_max=0.25, repeat=1, potl_index=0, stderr=1e-3, run_again=False, n_trials=10
     ):
         converged_reps, _, _ = self.get_solid_solution_repeats(
@@ -283,15 +290,14 @@ class ZeroK(HasProject):
         energies = np.nan * np.ones((len(c_Al), n_trials))
         for i, c in enumerate(c_Al):
             for n in np.arange(n_trials):
-                job = self.project.create.job.minimize.bcc(
+                energies[i, n] = self._get_peratom_energy(
+                    self.project.create.job.minimize.bcc,
                     potl_index=potl_index,
+                    run_again=run_again,
                     repeat=repeat,
                     c_Al=c,
-                    trial=n,
-                    delete_existing_job=run_again
+                    trial=n
                 )
-                job.run()
-                energies[i, n] = job.output.energy_pot[-1] / len(job.structure)
         return c_Al, energies
 
     @lru_cache()
@@ -311,13 +317,12 @@ class ZeroK(HasProject):
         energies = np.nan * np.ones((len(c_antisites), n_trials))
         for i, c in enumerate(c_antisites):
             for n in np.arange(n_trials):
-                job = self.project.create.job.minimize.d03(
+                energies[i, n] = self._get_peratom_energy(
+                    self.project.create.job.minimize.d03,
+                    run_again=run_again,
                     potl_index=potl_index,
                     repeat=repeat,
                     c_D03_anti_Al_to_Fe=c,
                     trial=n,
-                    delete_existing_job=run_again
                 )
-                job.run()
-                energies[i, n] = job.output.energy_pot[-1] / len(job.structure)
         return c_antisites, energies
