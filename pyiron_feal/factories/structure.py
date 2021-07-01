@@ -72,7 +72,7 @@ class _FeAlStructures:
 
         sym = structure.get_chemical_symbols()
         pre_swap_types = unique[sym[unique] == pre_swap_species]
-        site_type = pre_swap_types[np.argmin([np.abs(np.sum(equiv == i) - site_fraction) for i in pre_swap_types])]
+        site_type = pre_swap_types[np.argmin([np.abs(np.mean(equiv == i) - site_fraction) for i in pre_swap_types])]
 
         return np.arange(len(structure))[equiv == site_type]
 
@@ -93,8 +93,8 @@ class _FeAlStructures:
         structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
         structure = structure.repeat(repeat)
         n = len(structure)
-        structure = self._random_species_change(structure, np.arange(1, n, 2, dtype='int'), c_B2_anti_Fe_to_Al, 'Fe')
-        structure = self._random_species_change(structure, np.arange(0, n+1, 2, dtype='int'), c_B2_anti_Al_to_Fe, 'Al')
+        structure = self._random_species_change(structure, np.arange(1, n, 2, dtype='int'), c_B2_anti_Al_to_Fe, 'Fe')
+        structure = self._random_species_change(structure, np.arange(0, n+1, 2, dtype='int'), c_B2_anti_Fe_to_Al, 'Al')
         return structure
 
     @property

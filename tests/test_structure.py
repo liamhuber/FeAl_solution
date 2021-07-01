@@ -60,6 +60,13 @@ class TestStructureFactory(TestCase):
             msg="Dilute Al to Fe antisite should give less than default Al fraction"
         )
 
+    def test_d03_antisite_ids(self):
+        structure = self.sf.d03()
+        frac = self.sf.d03_fractions
+        self.assertEqual(int(0.25 * len(structure)), len(self.sf._d03_antisite_ids(structure, 'Al', frac.Al)))
+        self.assertEqual(int(0.5 * len(structure)), len(self.sf._d03_antisite_ids(structure, 'Fe', frac.aFe)))
+        self.assertEqual(int(0.25 * len(structure)), len(self.sf._d03_antisite_ids(structure, 'Fe', frac.bFe)))
+
     def test_fcc(self):
         structure = self.sf.fcc(c_Al=0.5)
         self.assertAlmostEqual(0.5 * len(structure), self._count_Al(structure), msg="Solid solution chemistry wrong")
