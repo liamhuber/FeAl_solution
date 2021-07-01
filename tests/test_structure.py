@@ -9,68 +9,51 @@ class TestStructureFactory(TestCase):
         cls.sf = StructureFactory().FeAl
 
     def test_cell(self):
-        bcc = self.sf.BCC()
+        bcc = self.sf.bcc()
         cell = bcc.cell.array
         self.assertTrue(np.allclose(np.diag(cell), cell[0, 0]), msg="Cell not cubic")
-        double = self.sf.BCC(a=2*cell[0, 0])
-        self.assertAlmostEqual((2**3) * bcc.get_volume(), double.get_volume(), msg=" correctly")
+        double = self.sf.bcc(a=2*cell[0, 0])
+        self.assertAlmostEqual(
+            (2**3) * (2**3) * bcc.get_volume(), double.get_volume(),
+            msg="Double lattice parameter not giving (double lattice)*(two repeats of BCC unit) times more volume"
+        )
 
     def test_lengths_the_same(self):
-        n_bcc = len(self.sf.BCC())
-        n_b2 = len(self.sf.B2())
-        n_d03 = len(self.sf.D03())
-        n_fcc = len(self.sf.FCC())
+        n_bcc = len(self.sf.bcc())
+        n_b2 = len(self.sf.b2())
+        n_d03 = len(self.sf.d03())
+        n_fcc = len(self.sf.fcc())
         self.assertEqual(n_bcc, n_b2, msg="B2 structure not the same length as BCC structure")
-        self.assertEqual((2**3)*n_bcc, n_d03, msg="D03 structure not the same length as BCC structure")
+        self.assertEqual(n_bcc, n_d03, msg="D03 structure not the same length as BCC structure")
         self.assertEqual(2*n_bcc, n_fcc,
-                         msg="FCC structure has twice as many atoms in unit cell, so should be 2x larger")
+                         msg="FCC structure has twice as many atoms in unit cell, so should be 2x atom count")
 
     @staticmethod
     def _get_frac_Al(structure):
         return np.sum(structure.get_chemical_symbols() == 'Al') / len(structure)
 
+    @staticmethod
+    def _count_Al(structure):
+        return np.sum(structure.get_chemical_symbols() == 'Al')
+
     def test_get_frac_Al(self):
-        struct = self.sf.BCC()
-        struct[0] = 'Al'
-        struct[1:] = 'Fe'
+        n_bcc = len(self.sf.bcc())
+        struct = self.sf.bcc(c_Al=1/n_bcc)
         self.assertAlmostEqual(1. / len(struct), self._get_frac_Al(struct))
 
-    def test_B2(self):
-        self.assertAlmostEqual(0.5, self._get_frac_Al(self.sf.B2()), msg="B2 chemistry incorrect")
+    def test_bcc(self):
+        n_bcc = len(self.sf.bcc())
+        self.assertEqual(1, self._count_Al(self.sf.bcc(c_Al=1 / n_bcc)))
+        self.assertEqual(n_bcc, self._count_Al(self.sf.bcc(c_Al=1)))
+
+    def test_b2(self):
+        self.assertAlmostEqual(0.5, self._get_frac_Al(self.sf.b2()), msg="B2 chemistry incorrect")
         # Lazily ignoring the location of the Al atoms
 
-    def test_D03(self):
-        self.assertAlmostEqual(0.25, self._get_frac_Al(self.sf.D03()), msg="D03 chemistry incorrect")
+    def test_d03(self):
+        self.assertAlmostEqual(0.25, self._get_frac_Al(self.sf.d03()), msg="D03 chemistry incorrect")
         # Lazily ignoring the location of the Al atoms
 
-    def test_random(self):
-        random = self.sf.random_BCC()
-        self.assertAlmostEqual(
-            1,
-            self.sf._c_Al / self._get_frac_Al(random),
-            places=1,
-            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {self.sf._c_Al}."
-        )
-        random2 = self.sf.random_BCC(a=1, repeat=4, c_Al=0.25)
-        self.assertAlmostEqual(
-            1,
-            0.25 / self._get_frac_Al(random2),
-            places=1,
-            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {0.25}."
-        )
-
-    def test_random_fcc(self):
-        random = self.sf.random_FCC(repeat=3)
-        self.assertAlmostEqual(
-            1,
-            self.sf._c_Al / self._get_frac_Al(random),
-            places=1,
-            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {self.sf._c_Al}."
-        )
-        random2 = self.sf.random_FCC(a=1, repeat=4, c_Al=0.25)
-        self.assertAlmostEqual(
-            1,
-            0.25 / self._get_frac_Al(random2),
-            places=1,
-            msg=f"Fraction Al {self._get_frac_Al(random)} was not within 10% of target {0.25}."
-        )
+    def test_fcc(self):
+        structure = self.sf.fcc(c_Al=0.5)
+        self.assertAlmostEqual(0.5 * len(structure), self._count_Al(structure), msg="Solid solution chemistry wrong")

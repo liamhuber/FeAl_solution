@@ -106,7 +106,7 @@ class _FeAlStructures:
             a=a if a is not None else self._fcc_lattice_constant,
             cubic=True
         ).repeat(int(2 * repeat))
-        structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Fe')
+        structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Al')
         return structure
 
     def BCC(self, a=None):
