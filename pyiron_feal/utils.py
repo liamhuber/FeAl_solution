@@ -56,11 +56,11 @@ class JobName(str):
     ):
         self = self.potl(potl_index)
         if bcc:
-            self = self.BCC
+            self = self.bcc
         if d03:
-            self = self.D03
+            self = self.d03
         if b2:
-            self = self.B2
+            self = self.b2
         if fcc:
             self = self.fcc
         self = self.a(a, ndigits=ndigits)
@@ -83,6 +83,22 @@ class JobName(str):
     @self_if_arg_is_none
     def potl(self, potl_index):
         return self.append(f'potl{potl_index}')
+
+    @property
+    def bcc(self):
+        return self.append('bcc')\
+
+    @property
+    def d03(self):
+        return self.append('d03')
+
+    @property
+    def b2(self):
+        return self.append('b2')
+
+    @property
+    def fcc(self):
+        return self.append('fcc')
 
     @property
     def BCC(self):
