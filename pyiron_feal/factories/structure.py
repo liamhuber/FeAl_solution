@@ -92,9 +92,9 @@ class _FeAlStructures:
         structure = self._double_unit(a=a)
         structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
         structure = structure.repeat(repeat)
-        n = len(structure)
-        structure = self._random_species_change(structure, np.arange(1, n, 2, dtype='int'), c_B2_anti_Al_to_Fe, 'Fe')
-        structure = self._random_species_change(structure, np.arange(0, n+1, 2, dtype='int'), c_B2_anti_Fe_to_Al, 'Al')
+        half_the_sites = np.arange(0, len(structure), 2, dtype='int')
+        structure = self._random_species_change(structure, half_the_sites, c_B2_anti_Fe_to_Al, 'Al')
+        structure = self._random_species_change(structure, half_the_sites + 1, c_B2_anti_Al_to_Fe, 'Fe')
         return structure
 
     @property
