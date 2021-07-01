@@ -41,3 +41,19 @@ class TestJobName(TestCase):
         self.assertEqual('foo_d03', JobName('foo').D03)
         self.assertEqual('foo_P0_0', JobName('foo').P(0.))
         self.assertEqual('foo_a4_36', JobName('foo').a(4.355))
+
+    def test_call(self):
+        name = JobName('foo')
+        self.assertEqual(
+            'foo_potl42_bcc_rep4_trl3_P0_0_273K_cDAl2Fe11_1',
+            name(
+                potl_index=42,
+                bcc=True,
+                repeat=4,
+                trial=3,
+                pressure=0.,
+                temperature=273,
+                c_D03_anti_Al_to_Fe=0.1111111,
+                ndigits=1
+            )
+        )

@@ -34,6 +34,40 @@ class JobName(str):
     def string(self):
         return str(self)
 
+    def __call__(
+            self,
+            potl_index=None,
+            bcc=False,
+            d03=False,
+            b2=False,
+            fcc=False,
+            a=None,
+            repeat=None,
+            trial=None,
+            pressure=None,
+            temperature=None,
+            c_Al=None,
+            c_D03_anti_Al_to_Fe=None,
+            ndigits=2
+    ):
+        self = self.potl(potl_index)
+        if bcc:
+            self = self.BCC
+        if d03:
+            self = self.D03
+        if b2:
+            self = self.B2
+        if fcc:
+            self = self.fcc
+        self = self.a(a, ndigits=ndigits)
+        self = self.repeat(repeat)
+        self = self.trial(trial)
+        self = self.P(pressure, ndigits=ndigits)
+        self = self.T(temperature, ndigits=ndigits)
+        self = self.c_Al(c_Al, ndigits=ndigits)
+        self = self.c_D03_anti_Al_to_Fe(c_D03_anti_Al_to_Fe, ndigits=ndigits)
+        return self.string
+
     @self_if_arg_is_none
     def append(self, other):
         return JobName(super(JobName, self).__add__('_' + self._filter_string(other)))
