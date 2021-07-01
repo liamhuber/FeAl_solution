@@ -73,25 +73,25 @@ class _FeAlStructures:
 
         return np.arange(len(structure))[equiv == site_type]
 
-    def d03(self, a=None, repeat=1, c_Al2Fe=None, c_aFe2Al=None, c_bFe2Al=None):
+    def d03(self, a=None, repeat=1, c_D03_anti_Al_to_Fe=None, c_D03_anti_aFe_to_Al=None, c_D03_anti_bFe_to_Al=None):
         structure = self._double_unit(a=a)
         structure[[5, 9, 3, 15]] = 'Al'
         structure.repeat(repeat)
         Al_ids = self._d03_antisite_ids(structure, 'Al', self.d03_fractions.Al)
         aFe_ids = self._d03_antisite_ids(structure, 'Fe', self.d03_fractions.aFe)
         bFe_ids = self._d03_antisite_ids(structure, 'Fe', self.d03_fractions.bFe)
-        structure = self._random_species_change(structure, Al_ids, c_Al2Fe, 'Fe')
-        structure = self._random_species_change(structure, aFe_ids, c_aFe2Al, 'Al')
-        structure = self._random_species_change(structure, bFe_ids, c_bFe2Al, 'Al')
+        structure = self._random_species_change(structure, Al_ids, c_D03_anti_Al_to_Fe, 'Fe')
+        structure = self._random_species_change(structure, aFe_ids, c_D03_anti_aFe_to_Al, 'Al')
+        structure = self._random_species_change(structure, bFe_ids, c_D03_anti_bFe_to_Al, 'Al')
         return structure
 
-    def b2(self, a=None, repeat=1, c_Fe2Al=None, c_Al2Fe=None):
+    def b2(self, a=None, repeat=1, c_B2_anti_Al_to_Fe=None, c_B2_anti_Fe_to_Al=None):
         structure = self._double_unit(a=a)
         structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
         structure = structure.repeat(repeat)
         n = len(structure)
-        structure = self._random_species_change(structure, np.arange(0, n + 1, 2, dtype='int'), c_Fe2Al, 'Al')
-        structure = self._random_species_change(structure, np.arange(1, n, 2, dtype='int'), c_Al2Fe, 'Fe')
+        structure = self._random_species_change(structure, np.arange(1, n, 2, dtype='int'), c_B2_anti_Fe_to_Al, 'Fe')
+        structure = self._random_species_change(structure, np.arange(0, n+1, 2, dtype='int'), c_B2_anti_Al_to_Fe, 'Al')
         return structure
 
     @property
