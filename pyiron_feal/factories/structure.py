@@ -45,8 +45,11 @@ class _FeAlStructures:
 
     @staticmethod
     def _random_species_change(structure, valid_sites, concentration, new_symbol):
-        if concentration is None or np.isclose(concentration, 0):
+        if isinstance(concentration, str) and concentration.lower() == 'dilute':
+            concentration = 1 / len(valid_sites)
+        elif concentration is None or np.isclose(concentration, 0):
             return structure
+
         n = len(valid_sites)
         n_swaps = min(round(concentration * n), n)
         structure[np.random.choice(valid_sites, n_swaps, replace=False)] = new_symbol

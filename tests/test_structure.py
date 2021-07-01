@@ -53,6 +53,12 @@ class TestStructureFactory(TestCase):
     def test_d03(self):
         self.assertAlmostEqual(0.25, self._get_frac_Al(self.sf.d03()), msg="D03 chemistry incorrect")
         # Lazily ignoring the location of the Al atoms
+        self.assertEqual(0.25, self.sf.d03_fractions.Al)
+        self.assertLess(
+            np.mean(self.sf.d03(c_D03_anti_Al_to_Fe='dilute').get_chemical_symbols == 'Al'),
+            self.sf.d03_fractions.Al,
+            msg="Dilute Al to Fe antisite should give less than default Al fraction"
+        )
 
     def test_fcc(self):
         structure = self.sf.fcc(c_Al=0.5)
