@@ -274,18 +274,33 @@ class ZeroK(HasProject):
             actual_err = np.std(energies) / np.sqrt(n_trials)
         return reps, actual_err, n_trials
 
-    @lru_cache()
-    def get_bcc_solution_energies(
-            self, c_Al_max=0.25, repeat=1, potl_index=0, stderr=1e-3, run_again=False, n_trials=10
-    ):
+    def _at_least_converged_repetions(self, repeat, potl_index, stderr, run_again, n_trials):
         converged_reps, _, _ = self.get_solid_solution_repeats(
             potl_index=potl_index, stderr=stderr, run_again=run_again, n_trials=n_trials
         )
-        repeat = max(converged_reps, repeat)
+        return max(converged_reps, repeat)
 
-        n_atoms = len(self.project.create.structure.FeAl.bcc(repeat=repeat))
-        c_Al = (np.arange(n_atoms) + 1) / n_atoms
-        c_Al = c_Al[c_Al <= c_Al_max]
+    @staticmethod
+    def _most_similar_range(desired_concentrations, n_sites):
+        allowable_concentrations = np.arange(n_sites + 1) / n_sites
+        return allowable_concentrations[
+            np.unique([np.argmin(np.abs(allowable_concentrations - c)) for c in desired_concentrations])
+        ]
+
+    def get_bcc_solution_energies(
+            self,
+            concentrations,
+            repeat=1,
+            potl_index=0,
+            stderr=1e-3,
+            run_again=False,
+            n_trials=10,
+    ):
+        repeat = self._at_least_converged_repetions(repeat, potl_index, stderr, run_again, n_trials)
+        c_Al = self._most_similar_range(
+            concentrations,
+            len(self.project.create.structure.FeAl.bcc(repeat=repeat))
+        )
 
         energies = np.nan * np.ones((len(c_Al), n_trials))
         for i, c in enumerate(c_Al):
@@ -300,19 +315,19 @@ class ZeroK(HasProject):
                 )
         return c_Al, energies
 
-    @lru_cache()
     def get_d03_Al_to_Fe_energies(
-            self, c_antisite_max=0.25, repeat=1, potl_index=0, stderr=1e-3, run_again=False, n_trials=10
+            self,
+            concentrations,
+            repeat=1,
+            potl_index=0,
+            stderr=1e-3,
+            run_again=False,
+            n_trials=10,
     ):
-        converged_reps, _, _ = self.get_solid_solution_repeats(
-            potl_index=potl_index, stderr=stderr, run_again=run_again, n_trials=n_trials
-        )
-        repeat = int(max(converged_reps, repeat))
-
-        n_antisites = len(self.project.create.structure.FeAl.d03(repeat=repeat)) \
-                      * self.project.create.structure.FeAl.d03_fractions.Al
-        c_antisites = (np.arange(n_antisites) + 1) / n_antisites
-        c_antisites = c_antisites[c_antisites <= c_antisite_max]
+        repeat = self._at_least_converged_repetions(repeat, potl_index, stderr, run_again, n_trials)
+        n_sites = len(self.project.create.structure.FeAl.d03(repeat=repeat))
+        n_antisites = n_sites * self.project.create.structure.FeAl.d03_fractions.Al
+        c_antisites = self._most_similar_range(concentrations, n_antisites)
 
         energies = np.nan * np.ones((len(c_antisites), n_trials))
         for i, c in enumerate(c_antisites):
