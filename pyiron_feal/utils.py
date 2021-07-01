@@ -48,6 +48,10 @@ class JobName(str):
             temperature=None,
             c_Al=None,
             c_D03_anti_Al_to_Fe=None,
+            c_D03_anti_aFe_to_Al=None,
+            c_D03_anti_bFe_to_Al=None,
+            c_B2_anti_Al_to_Fe=None,
+            c_B2_anti_Fe_to_Al=None,
             ndigits=2
     ):
         self = self.potl(potl_index)
@@ -66,6 +70,10 @@ class JobName(str):
         self = self.P(pressure, ndigits=ndigits)
         self = self.c_Al(c_Al, ndigits=ndigits)
         self = self.c_D03_anti_Al_to_Fe(c_D03_anti_Al_to_Fe, ndigits=ndigits)
+        self = self.c_D03_anti_aFe_to_Al(c_D03_anti_aFe_to_Al, ndigits=ndigits)
+        self = self.c_D03_anti_bFe_to_Al(c_D03_anti_bFe_to_Al, ndigits=ndigits)
+        self = self.c_B2_anti_Al_to_Fe(c_B2_anti_Al_to_Fe, ndigits=ndigits)
+        self = self.c_B2_anti_Fe_to_Al(c_B2_anti_Fe_to_Al, ndigits=ndigits)
         return self.string
 
     @self_if_arg_is_none
@@ -130,6 +138,26 @@ class JobName(str):
     def c_D03_anti_Al_to_Fe(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
         return self.append(f'cDAl2Fe{round(c_antisites * 100, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def c_D03_anti_aFe_to_Al(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cDaFe2Al{round(c_antisites * 100, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def c_D03_anti_bFe_to_Al(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cDbFe2Al{round(c_antisites * 100, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def c_B2_anti_Al_to_Fe(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cBAl2Fe{round(c_antisites * 100, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def c_B2_anti_Fe_to_Al(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cBFe2Al{round(c_antisites * 100, ndigits=ndigits)}')
 
 
 class HasProject:
