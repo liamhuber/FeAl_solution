@@ -31,40 +31,57 @@ class ZeroK(HasProject):
         return job.output.energy_pot[-1] / len(job.structure)
 
     @lru_cache()
-    def get_BCC_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
+    def get_bcc_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
         return self._get_peratom_energy(
-            self.project.create.job.minimize.BCC,
+            self.project.create.job.minimize.bcc,
             potl_index=potl_index,
             run_again=run_again,
             **other_job_kwargs
         )
 
     @lru_cache()
-    def get_FCC_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
+    def get_fcc_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
         return self._get_peratom_energy(
-            self.project.create.job.minimize.FCC,
+            self.project.create.job.minimize.fcc,
             potl_index=potl_index,
             run_again=run_again,
             **other_job_kwargs
         )
 
     @lru_cache()
-    def get_B2_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
+    def get_b2_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
         return self._get_peratom_energy(
-            self.project.create.job.minimize.B2,
+            self.project.create.job.minimize.b2,
             potl_index=potl_index,
             run_again=run_again,
             **other_job_kwargs
         )
 
     @lru_cache()
-    def get_D03_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
+    def get_d03_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
         return self._get_peratom_energy(
             self.project.create.job.minimize.D03,
             potl_index=potl_index,
             run_again=run_again,
             **other_job_kwargs
         )
+
+    def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
+        (fig, ax) = plt.subplots() if ax is None else (None, ax)
+        e_fcc = self.get_fcc_peratom_energy(potl_index=potl_index)
+        e_bcc = self.get_bcc_peratom_energy(potl_index=potl_index)
+        e_d03 = self.get_d03_peratom_energy(potl_index=potl_index)
+        e_b2 = self.get_b2_peratom_energy(potl_index=potl_index)
+
+        c_Al = [0, 0, 0.25, 0.5]
+        energies = [e_fcc, e_bcc, e_d03, e_b2]
+        ax.plot(c_Al, energies, marker='o')
+        if beautify:
+            ax.set_xlabel('$c_\mathrm{Al}$')
+            ax.set_ylabel('$E$ [eV/atom]')
+            for c, E, label in zip(c_Al, energies, ['FCC', 'BCC', 'D03', 'B2']):
+                ax.annotate(label, (c, E))
+        return ax
 
     @staticmethod
     def _get_size_converged_point_defect_energy(
@@ -231,23 +248,6 @@ class ZeroK(HasProject):
                 job.run()
                 energies[i, n] = job.output.energy_pot[-1] / len(job.structure)
         return c_antisites, energies
-
-    def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
-        (fig, ax) = plt.subplots() if ax is None else (None, ax)
-        E_FCC = self.get_FCC_peratom_energy(potl_index=potl_index)
-        E_BCC = self.get_BCC_peratom_energy(potl_index=potl_index)
-        E_D03 = self.get_D03_peratom_energy(potl_index=potl_index)
-        E_B2 = self.get_B2_peratom_energy(potl_index=potl_index)
-
-        c_Al = [0, 0, 0.25, 0.5]
-        energies = [E_FCC, E_BCC, E_D03, E_B2]
-        ax.plot(c_Al, energies, marker='o')
-        if beautify:
-            ax.set_xlabel('$c_\mathrm{Al}$')
-            ax.set_ylabel('$E$ [eV/atom]')
-            for c, E, label in zip(c_Al, energies, ['FCC', 'BCC', 'D03', 'B2']):
-                ax.annotate(label, (c, E))
-        return ax
 
     def get_dmu_0K(self, c_Al=0.18, potl_index=0, run_again=False, **other_job_kwargs):
         E_BCC = self.get_BCC_peratom_energy(potl_index=potl_index, run_again=run_again, **other_job_kwargs)
