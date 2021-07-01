@@ -79,7 +79,7 @@ class _FeAlStructures:
     def d03(self, a=None, repeat=1, c_D03_anti_Al_to_Fe=None, c_D03_anti_aFe_to_Al=None, c_D03_anti_bFe_to_Al=None):
         structure = self._double_unit(a=a)
         structure[[5, 9, 3, 15]] = 'Al'
-        structure.repeat(repeat)
+        structure = structure.repeat(repeat)
         Al_ids = self._d03_antisite_ids(structure, 'Al', self.d03_fractions.Al)
         aFe_ids = self._d03_antisite_ids(structure, 'Fe', self.d03_fractions.aFe)
         bFe_ids = self._d03_antisite_ids(structure, 'Fe', self.d03_fractions.bFe)
