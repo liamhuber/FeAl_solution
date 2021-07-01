@@ -45,14 +45,14 @@ class _FeAlStructures:
 
     @staticmethod
     def _random_species_change(structure, valid_sites, concentration, new_symbol):
-        if concentration == 0:
+        if concentration is None or np.isclose(concentration, 0):
             return structure
         n = len(valid_sites)
         n_swaps = min(round(concentration * n), n)
         structure[np.random.choice(valid_sites, n_swaps, replace=False)] = new_symbol
         return structure
 
-    def bcc(self, a=None, repeat=1, c_Al=0):
+    def bcc(self, a=None, repeat=1, c_Al=None):
         structure = self._double_unit(a=a).repeat(repeat)
         structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Al')
         return structure
@@ -73,7 +73,7 @@ class _FeAlStructures:
 
         return np.arange(len(structure))[equiv == site_type]
 
-    def d03(self, a=None, repeat=1, c_Al2Fe=0, c_aFe2Al=0, c_bFe2Al=0):
+    def d03(self, a=None, repeat=1, c_Al2Fe=None, c_aFe2Al=None, c_bFe2Al=None):
         structure = self._double_unit(a=a)
         structure[[5, 9, 3, 15]] = 'Al'
         structure.repeat(repeat)
@@ -85,7 +85,7 @@ class _FeAlStructures:
         structure = self._random_species_change(structure, bFe_ids, c_bFe2Al, 'Al')
         return structure
 
-    def b2(self, a=None, repeat=1, c_Fe2Al=0, c_Al2Fe=0):
+    def b2(self, a=None, repeat=1, c_Fe2Al=None, c_Al2Fe=None):
         structure = self._double_unit(a=a)
         structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
         structure = structure.repeat(repeat)
@@ -99,7 +99,7 @@ class _FeAlStructures:
         d_1nn = self._double_unit().get_neighbors(num_neighbors=1, id_list=[0]).distances[0, 0]
         return d_1nn * np.sqrt(2)
 
-    def fcc(self, a=None, repeat=1, c_Al=0):
+    def fcc(self, a=None, repeat=1, c_Al=None):
         structure = self._factory.bulk(
             'Fe',
             crystalstructure='fcc',
