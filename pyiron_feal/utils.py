@@ -54,6 +54,7 @@ class JobName(str):
             c_B2_anti_Al_to_Fe=None,
             c_B2_anti_Fe_to_Al=None,
             max_cluster_fraction=None,
+            symbol_ref=None,
             ndigits=2
     ):
         if interactive:
@@ -78,6 +79,8 @@ class JobName(str):
         self = self.c_D03_anti_bFe_to_Al(c_D03_anti_bFe_to_Al, ndigits=ndigits)
         self = self.c_B2_anti_Al_to_Fe(c_B2_anti_Al_to_Fe, ndigits=ndigits)
         self = self.c_B2_anti_Fe_to_Al(c_B2_anti_Fe_to_Al, ndigits=ndigits)
+        self = self.max_cluster_fraction(max_cluster_fraction, ndigits=ndigits)
+        self = self.symbol_ref(symbol_ref)
         return self.string
 
     @self_if_arg_is_none
@@ -172,6 +175,10 @@ class JobName(str):
     @self_if_arg_is_none
     def max_cluster_fraction(self, fraction, ndigits=2):
         return self.append(f'cf{round(fraction, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def symbol_ref(self, name):
+        return self.append(f'ref{name}')
 
 
 class HasProject:

@@ -392,7 +392,8 @@ class ZeroK(HasProject):
             pressure=pressure,
             delete_existing_job=run_again,
             c_Al=c_Al,
-            max_cluster_fraction=0.125
+            max_cluster_fraction=0.125,
+            symbol_ref=reference_structure_creator.__name__
         )
         if job.status != 'finished':
             ref_symbols = reference_structure_creator(a=a, repeat=repeat).get_chemical_symbols()

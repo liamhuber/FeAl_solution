@@ -156,7 +156,8 @@ class _Minimize(HasProject):
             pressure=0,
             delete_existing_job=False,
             c_Al=None,
-            max_cluster_fraction=0.125
+            max_cluster_fraction=0.125,
+            symbol_ref=None
     ):
         return self._lammps_minimization(
             potl_index=potl_index,
@@ -169,7 +170,8 @@ class _Minimize(HasProject):
                 trial=trial,
                 pressure=pressure,
                 c_Al=c_Al,
-                max_cluster_fraction=max_cluster_fraction
+                max_cluster_fraction=max_cluster_fraction,
+                symbol_ref=symbol_ref
             ),
             structure=self.project.create.structure.FeAl.bcc(a=a, repeat=repeat, c_Al=c_Al),
             pressure=pressure,
