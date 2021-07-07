@@ -108,26 +108,6 @@ class JobName(str):
     def fcc(self):
         return self.append('fcc')
 
-    @property
-    def BCC(self):
-        return self.append('bcc')
-
-    @property
-    def random_BCC(self):
-        return self.append('rbcc')
-
-    @property
-    def D03(self):
-        return self.append('d03')
-
-    @property
-    def B2(self):
-        return self.append('b2')
-
-    @property
-    def FCC(self):
-        return self.append('fcc')
-
     @self_if_arg_is_none
     def a(self, a, ndigits=2):
         """Lattice constant."""

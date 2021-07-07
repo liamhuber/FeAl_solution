@@ -112,67 +112,6 @@ class _FeAlStructures:
         structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Al')
         return structure
 
-    def BCC(self, a=None):
-        return self._factory.bulk('Fe', a=a, cubic=True)
-
-    def B2(self, a=None):
-        struct = self.BCC(a=a)
-        struct[1] = 'Al'
-        return struct
-
-    def D03(self, a=None):
-        struct = self.BCC(a=a).repeat(2)
-        manually_identified_Al_sites = [5, 9, 3, 15]
-        struct[manually_identified_Al_sites] = 'Al'
-        return struct
-
-    def random_BCC(self, a=None, repeat=2, c_Al=None):
-        c_Al = self._c_Al if c_Al is None else c_Al
-        struct = self.BCC(a=a).repeat(repeat)
-        n_Al = round(c_Al * len(struct))
-        struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
-        return struct
-
-    def _D03_antisite_fraction_to_count(self, structure, site_fraction, c_antisites):
-        return round(c_antisites * site_fraction * len(structure)) if c_antisites is not None else 1
-
-    def _random_D03_antisites(self, from_species, to_species, site_fraction, a=None, repeat=1, c_antisites=None):
-        structure = self.D03(a=a).repeat(repeat)
-        n_antisites = self._D03_antisite_fraction_to_count(structure, site_fraction, c_antisites)
-        available_antisite_ids = self._d03_antisite_ids(structure, from_species, site_fraction)
-        structure[np.random.choice(available_antisite_ids, n_antisites, replace=False)] = to_species
-        return structure
-
-    def random_D03_antisites_Al_to_Fe(self, a=None, repeat=1, c_antisites=None):
-        return self._random_D03_antisites(
-            'Al', 'Fe', self.d03_fractions.Al, a=a, repeat=repeat, c_antisites=c_antisites
-        )
-
-    def random_D03_antisites_aFe_to_Al(self, a=None, repeat=1, c_antisites=None):
-        return self._random_D03_antisites(
-            'Fe', 'Al', self.d03_fractions.aFe, a=a, repeat=repeat, c_antisites=c_antisites
-        )
-
-    def random_D03_antisites_bFe_to_Al(self, a=None, repeat=1, c_antisites=None):
-        return self._random_D03_antisites(
-            'Fe', 'Al', self.d03_fractions.bFe, a=a, repeat=repeat, c_antisites=c_antisites
-        )
-
-    def FCC(self, a=None):
-        return self._factory.bulk(
-            'Fe',
-            crystalstructure='fcc',
-            a=a if a is not None else self._fcc_lattice_constant,
-            cubic=True
-        )
-
-    def random_FCC(self, a=None, repeat=2, c_Al=None):
-        c_Al = self._c_Al if c_Al is None else c_Al
-        struct = self.FCC(a=a).repeat(repeat)
-        n_Al = round(c_Al * len(struct))
-        struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
-        return struct
-
 
 class _D03Fractions:
     @property
