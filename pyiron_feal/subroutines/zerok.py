@@ -208,10 +208,16 @@ class ZeroK(HasProject):
         S = -site_fraction * KB * ((1 - c) * np.log(1 - c) + c * np.log(c))
         return S
 
-    def _G_dilute_mixing(self, ideal_energy, defect_concentration, defect_energy, temperature, site_fraction=1):
+    def G_dilute_mixing(self, ideal_energy, defect_concentration, defect_energy, temperature, site_fraction=1):
         return (
                 ideal_energy
                 + defect_concentration * defect_energy
+                - temperature * self.S_ideal_mixing(defect_concentration, site_fraction=site_fraction)
+        )
+
+    def G_mixing(self, potential_energy, defect_concentration, temperature, site_fraction=1):
+        return (
+                potential_energy
                 - temperature * self.S_ideal_mixing(defect_concentration, site_fraction=site_fraction)
         )
 
@@ -230,20 +236,20 @@ class ZeroK(HasProject):
 
         bcc = self.get_bcc_peratom_energy(potl_index=potl_index)
         form = self.get_dilute_formation_energy(potl_index=potl_index)[0]
-        G_BCC = self._G_dilute_mixing(bcc, c_range, form, temperature)
+        G_BCC = self.G_dilute_mixing(bcc, c_range, form, temperature)
 
         d03 = self.get_d03_peratom_energy(potl_index=potl_index)
         d03_Al_to_Fe = self.get_dilute_d03_Al_to_Fe_energy(potl_index=potl_index)[0]
         d03_aFe_to_Al = self.get_dilute_d03_aFe_to_Al_energy(potl_index=potl_index)[0]
         d03_bFe_to_Al = self.get_dilute_d03_bFe_to_Al_energy(potl_index=potl_index)[0]
         sf = self.project.create.structure.FeAl.d03_fractions
-        G_D03_low_Al = self._G_dilute_mixing(d03, (0.25 - c_range), d03_Al_to_Fe, temperature, site_fraction=sf.Al)
+        G_D03_low_Al = self.G_dilute_mixing(d03, (0.25 - c_range), d03_Al_to_Fe, temperature, site_fraction=sf.Al)
         if d03_bFe_to_Al < d03_aFe_to_Al:
             form_hi, frac_hi, form_vhi, frac_vhi = d03_bFe_to_Al, sf.bFe, d03_aFe_to_Al, sf.aFe
         else:
             form_hi, frac_hi, form_vhi, frac_vhi = d03_aFe_to_Al, sf.aFe, d03_bFe_to_Al, sf.bFe
-        G_D03_hi_Al = self._G_dilute_mixing(d03, (c_range - 0.25), form_hi, temperature, site_fraction=frac_hi)
-        G_D03_very_hi_Al = self._G_dilute_mixing(
+        G_D03_hi_Al = self.G_dilute_mixing(d03, (c_range - 0.25), form_hi, temperature, site_fraction=frac_hi)
+        G_D03_very_hi_Al = self.G_dilute_mixing(
             d03 + frac_hi * form_hi, (c_range - (0.25 + frac_hi)), form_vhi, temperature, site_fraction=frac_vhi
         )
         G_D03 = (
@@ -255,8 +261,8 @@ class ZeroK(HasProject):
         b2 = self.get_b2_peratom_energy(potl_index=potl_index)
         b2_Al_to_Fe = self.get_dilute_b2_Al_to_Fe_energy(potl_index=potl_index)[0]
         b2_Fe_to_Al = self.get_dilute_b2_Fe_to_Al_energy(potl_index=potl_index)[0]
-        G_B2_low_Al = self._G_dilute_mixing(b2, (0.5 - c_range), b2_Al_to_Fe, temperature, site_fraction=0.5)
-        G_B2_hi_Al = self._G_dilute_mixing(b2, (c_range - 0.5), b2_Fe_to_Al, temperature, site_fraction=0.5)
+        G_B2_low_Al = self.G_dilute_mixing(b2, (0.5 - c_range), b2_Al_to_Fe, temperature, site_fraction=0.5)
+        G_B2_hi_Al = self.G_dilute_mixing(b2, (c_range - 0.5), b2_Fe_to_Al, temperature, site_fraction=0.5)
         G_B2 = np.nan_to_num(G_B2_low_Al, nan=0) + np.nan_to_num(G_B2_hi_Al, nan=0)
 
         ax.plot(c_range, G_BCC, label='BCC')
