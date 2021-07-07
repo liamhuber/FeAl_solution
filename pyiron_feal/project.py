@@ -71,3 +71,6 @@ class Project(ProjectCore):
     @property
     def zerok(self):
         return self._zerok
+
+    def lammps_potl_to_string(self, potl_name):
+        return ' '.join(potl_name.split('--')[:2]).replace('-', ' ')

@@ -74,7 +74,7 @@ class ZeroK(HasProject):
             **other_job_kwargs
         )
 
-    def plot_phases_0K(self, potl_index=0, ax=None, beautify=True):
+    def plot_phases_0K(self, potl_index=0, ax=None, label_points=True, label_x=True, label_y=True, relative=True):
         (fig, ax) = plt.subplots() if ax is None else (None, ax)
         e_fcc = self.get_fcc_peratom_energy(potl_index=potl_index)
         e_bcc = self.get_bcc_peratom_energy(potl_index=potl_index)
@@ -82,13 +82,18 @@ class ZeroK(HasProject):
         e_b2 = self.get_b2_peratom_energy(potl_index=potl_index)
 
         c_Al = [0, 0, 0.25, 0.5]
-        energies = [e_fcc, e_bcc, e_d03, e_b2]
+        energies = np.array([e_fcc, e_bcc, e_d03, e_b2])
+        if relative:
+            energies -= e_bcc
         ax.plot(c_Al, energies, marker='o')
-        if beautify:
-            ax.set_xlabel('$c_\mathrm{Al}$')
-            ax.set_ylabel('$E$ [eV/atom]')
-            for c, E, label in zip(c_Al, energies, ['FCC', 'BCC', 'D03', 'B2']):
+        if label_points:
+            for c, E, label in zip(c_Al, energies, ['FCC', 'BCC', '$\mathrm{D0}_3$', 'B2']):
                 ax.annotate(label, (c, E))
+        if label_x:
+            ax.set_xlabel('$c_\mathrm{Al}$')
+        if label_y:
+            ax.set_ylabel('$E$ [eV/atom]')
+
         return ax
 
     def _get_size_converged_point_defect_energy(
@@ -181,6 +186,22 @@ class ZeroK(HasProject):
             **other_job_kwargs
         )
 
+    def dilute_point_defect_dictionary(self, potl_index=0):
+        return {
+            'BCC': {
+                'formation': self.get_dilute_formation_energy(potl_index=potl_index)
+            },
+            'D03': {
+                'Al->Fe': self.get_dilute_d03_Al_to_Fe_energy(potl_index=potl_index),
+                'aFe->Al': self.get_dilute_d03_aFe_to_Al_energy(potl_index=potl_index),
+                'bFe->Al': self.get_dilute_d03_bFe_to_Al_energy(potl_index=potl_index)
+            },
+            'B2': {
+                'Al->Fe': self.get_dilute_b2_Al_to_Fe_energy(potl_index=potl_index),
+                'Fe->Al': self.get_dilute_b2_Fe_to_Al_energy(potl_index=potl_index)
+            }
+        }
+
     @staticmethod
     def S_ideal_mixing(c, site_fraction=1):
         c = c / site_fraction
@@ -194,7 +215,8 @@ class ZeroK(HasProject):
                 - temperature * self.S_ideal_mixing(defect_concentration, site_fraction=site_fraction)
         )
 
-    def plot_G_0K_point_defects(self, temperature=523, c_range=None, potl_index=0, ax=None, beautify=True):
+    def plot_G_0K_point_defects(
+            self, temperature=523, c_range=None, potl_index=0, ax=None, label_x=True, label_y=True, legend=True):
         """
         Assumes no stoichiometry-neutral swaps and that the Fe-rich D03 phase first fills all of the Fe site with the
         lower potential energy cost for swaping to Al, then proceeds to fill the more expensive sites. It's assumed that
@@ -238,12 +260,14 @@ class ZeroK(HasProject):
         G_B2 = np.nan_to_num(G_B2_low_Al, nan=0) + np.nan_to_num(G_B2_hi_Al, nan=0)
 
         ax.plot(c_range, G_BCC, label='BCC')
-        ax.plot(c_range, G_D03, label='D03')
-        ax.plot(c_range, G_B2, label='B2')
-        if beautify:
+        ax.plot(c_range, G_D03, label='D03', linestyle='--')
+        ax.plot(c_range, G_B2, label='B2', linestyle=':')
+        if label_x:
             ax.set_xlabel('$c_\mathrm{Al}$')
+        if label_y:
             ax.set_ylabel('$G_\mathrm{phase}$ [eV]')
-            fig.legend()
+        if legend:
+            ax.legend()
         return ax
 
     @lru_cache()
