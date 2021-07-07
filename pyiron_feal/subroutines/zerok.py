@@ -371,3 +371,57 @@ class ZeroK(HasProject):
                     trial=n,
                 )
         return c_antisites, energies
+
+    def get_interactive_cluster_data(
+            self,
+            reference_structure_creator,
+            potl_index=0,
+            a=None,
+            repeat=3,
+            trial=0,
+            pressure=0,
+            run_again=False,
+            c_Al=None,
+            cluster_cell_fraction_max=1/8
+    ):
+        job = self.project.create.job.minimize.interactive_cluster(
+            potl_index=potl_index,
+            a=a,
+            repeat=repeat,
+            trial=trial,
+            pressure=pressure,
+            delete_existing_job=run_again,
+            c_Al=c_Al,
+            max_cluster_fraction=0.125
+        )
+        if job.status != 'finished':
+            ref_symbols = reference_structure_creator(a=a, repeat=repeat).get_chemical_symbols()
+            neigh = job.structure.get_neighbors(num_neighbors=8)
+            cluster = []
+            concentration = []
+            cluster_volume = []
+            job.interactive_open()
+            for _ in np.arange(int(len(job.structure) * cluster_cell_fraction_max)):
+                all_neighbors = neigh.indices[cluster].flatten() if len(cluster) > 0 else np.array([0])
+                possible_new_neighbors = all_neighbors[~np.in1d(all_neighbors, cluster)]
+                i = np.random.choice(possible_new_neighbors, 1)[0]
+                job.structure[i] = ref_symbols[i]
+                cluster.append(i)
+                job.run()
+                relaxed_structure = job.get_structure()
+                concentration.append(np.mean(relaxed_structure.get_chemical_symbols() == 'Al'))
+                cluster_volume.append(np.sum(relaxed_structure.analyse.pyscal_voronoi_volume()[cluster]))
+                job.interactive_structure_setter(relaxed_structure)
+            job.interactive_close()
+            with job._hdf5.open('output/special') as hdf:
+                hdf['cluster'] = cluster
+                hdf['concentration'] = concentration
+                hdf['clustervolume'] = cluster_volume
+
+        return (
+            job,
+            job['output/special/cluster'],
+            job['output/special/concentration'],
+            job['output/special/clustervolume'],
+            job['output/generic/energy_pot']
+        )

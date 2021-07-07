@@ -146,3 +146,32 @@ class _Minimize(HasProject):
             pressure=pressure,
             delete_existing_job=delete_existing_job
         )
+
+    def interactive_cluster(
+            self,
+            potl_index=0,
+            a=None,
+            repeat=1,
+            trial=None,
+            pressure=0,
+            delete_existing_job=False,
+            c_Al=None,
+            max_cluster_fraction=0.125
+    ):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                interactive=True,
+                potl_index=potl_index,
+                bcc=True,
+                a=a,
+                repeat=repeat,
+                trial=trial,
+                pressure=pressure,
+                c_Al=c_Al,
+                max_cluster_fraction=max_cluster_fraction
+            ),
+            structure=self.project.create.structure.FeAl.bcc(a=a, repeat=repeat, c_Al=c_Al),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )

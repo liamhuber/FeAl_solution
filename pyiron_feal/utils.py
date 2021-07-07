@@ -36,6 +36,7 @@ class JobName(str):
 
     def __call__(
             self,
+            interactive=False,
             potl_index=None,
             bcc=False,
             d03=False,
@@ -52,8 +53,11 @@ class JobName(str):
             c_D03_anti_bFe_to_Al=None,
             c_B2_anti_Al_to_Fe=None,
             c_B2_anti_Fe_to_Al=None,
+            max_cluster_fraction=None,
             ndigits=2
     ):
+        if interactive:
+            self = self.interactive
         self = self.potl(potl_index)
         if bcc:
             self = self.bcc
@@ -79,6 +83,10 @@ class JobName(str):
     @self_if_arg_is_none
     def append(self, other):
         return JobName(super(JobName, self).__add__('_' + self._filter_string(other)))
+
+    @property
+    def interactive(self):
+        return self.append('i')
 
     @self_if_arg_is_none
     def potl(self, potl_index):
@@ -180,6 +188,10 @@ class JobName(str):
     def c_B2_anti_Fe_to_Al(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
         return self.append(f'cBFe2Al{self._concentration(c_antisites, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def max_cluster_fraction(self, fraction, ndigits=2):
+        return self.append(f'cf{round(fraction, ndigits=ndigits)}')
 
 
 class HasProject:
