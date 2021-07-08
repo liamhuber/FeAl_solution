@@ -93,7 +93,7 @@ class JobName(str):
 
     @self_if_arg_is_none
     def potl(self, potl_index):
-        return self.append(f'potl{potl_index}')
+        return self.append(f'p{potl_index}')
 
     @property
     def bcc(self):
@@ -119,12 +119,12 @@ class JobName(str):
     @self_if_arg_is_none
     def repeat(self, n_reps):
         """Cell repetition (integer only)."""
-        return self.append(f'rep{n_reps}')
+        return self.append(f'r{n_reps}')
 
     @self_if_arg_is_none
     def trial(self, trial):
         """Stochastic trial repetition."""
-        return self.append(f'trl{trial}')
+        return self.append(f't{trial}')
 
     @self_if_arg_is_none
     def T(self, temperature, ndigits=2):
@@ -150,27 +150,27 @@ class JobName(str):
     @self_if_arg_is_none
     def c_D03_anti_Al_to_Fe(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cDAl2Fe{self._concentration(c_antisites, ndigits=ndigits)}')
+        return self.append(f'cDAl{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_D03_anti_aFe_to_Al(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cDaFe2Al{self._concentration(c_antisites, ndigits=ndigits)}')
+        return self.append(f'cDaFe{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_D03_anti_bFe_to_Al(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cDbFe2Al{self._concentration(c_antisites, ndigits=ndigits)}')
+        return self.append(f'cDbFe{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_B2_anti_Al_to_Fe(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cBAl2Fe{self._concentration(c_antisites, ndigits=ndigits)}')
+        return self.append(f'cBAl{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def c_B2_anti_Fe_to_Al(self, c_antisites, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self.append(f'cBFe2Al{self._concentration(c_antisites, ndigits=ndigits)}')
+        return self.append(f'cBFe{self._concentration(c_antisites, ndigits=ndigits)}')
 
     @self_if_arg_is_none
     def max_cluster_fraction(self, fraction, ndigits=2):
@@ -178,7 +178,7 @@ class JobName(str):
 
     @self_if_arg_is_none
     def symbol_ref(self, name):
-        return self.append(f'ref{name}')
+        return self.append(f'r{name}')
 
 
 class HasProject:
