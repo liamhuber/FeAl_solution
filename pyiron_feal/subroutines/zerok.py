@@ -271,7 +271,7 @@ class ZeroK(HasProject):
         if label_x:
             ax.set_xlabel('$c_\mathrm{Al}$')
         if label_y:
-            ax.set_ylabel('$G_\mathrm{phase}$ [eV]')
+            ax.set_ylabel('$G^\mathrm{dilute}$ [eV]')
         if legend:
             ax.legend()
         return ax
