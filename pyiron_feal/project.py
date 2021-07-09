@@ -4,6 +4,7 @@
 
 from pyiron_atomistics import Project as ProjectCore
 from pyiron_feal.factories.structure import StructureFactory
+from pyiron_feal.factories.job import JobFactory
 from pyiron_base import DataContainer
 from pyiron_feal.subroutines import ZeroK
 import numpy as np
@@ -32,7 +33,8 @@ class ProjectInput(DataContainer):
             '2010--Lee-E--Fe-Al--LAMMPS--ipr1',
             '2012--Jelinek-B--Al-Si-Mg-Cu-Fe--LAMMPS--ipr2',
         ])
-        self.experimental_fractions = {
+        self.experimental_data = {
+            'c_Al': 0.18,
             'T': 523,
             'SS': 1 - (0.0042 + 0.1232),
             'B2': 0.0042,
@@ -54,6 +56,7 @@ class Project(ProjectCore):
             default_working_directory=default_working_directory
         )
         self.create._structure = StructureFactory()
+        self.create._job_factory = JobFactory(self)
         self._zerok = ZeroK(self)
 
     @property
@@ -66,5 +69,8 @@ class Project(ProjectCore):
             return self.data.input
 
     @property
-    def ZeroK(self):
+    def zerok(self):
         return self._zerok
+
+    def lammps_potl_to_string(self, potl_name):
+        return ' '.join(potl_name.split('--')[:2]).replace('-', ' ')

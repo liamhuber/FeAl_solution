@@ -27,8 +27,34 @@ class TestJobName(TestCase):
         self.assertEqual('foo_273K', JobName('foo').T(273))
         self.assertEqual('foo_273_0K', JobName('foo').T(273.0))
 
-    def test_tags(self):
+    def test_other_tags(self):
         self.assertEqual('foo_potl42', JobName('foo').potl(42))
-        self.assertEqual('foo_cAl33_33', JobName('foo').concentration(0.33333333))
-        self.assertEqual('foo_cellr4', JobName('foo').cell_reps(4))
-        self.assertEqual('foo', JobName('foo').cell_reps(None))
+        self.assertEqual('foo_cAl33_33', JobName('foo').c_Al(0.33333333))
+        self.assertEqual('foo_cAl33_333', JobName('foo').c_Al(0.33333333, ndigits=3))
+        self.assertEqual('foo_rep4', JobName('foo').repeat(4))
+        self.assertEqual('foo', JobName('foo').repeat(None))
+        self.assertEqual('foo_trl3', JobName('foo').trial(3))
+        self.assertEqual('foo_bcc', JobName('foo').bcc)
+        self.assertEqual('foo_fcc', JobName('foo').fcc)
+        self.assertEqual('foo_b2', JobName('foo').b2)
+        self.assertEqual('foo_d03', JobName('foo').d03)
+        self.assertEqual('foo_P0_0', JobName('foo').P(0.))
+        self.assertEqual('foo_a4_36', JobName('foo').a(4.355))
+        self.assertEqual('foo_cDAl2Fedil', JobName('foo').c_D03_anti_Al_to_Fe('Dilute'))
+
+    def test_call(self):
+        name = JobName('foo')
+        self.assertEqual(
+            'foo_potl42_bcc_rep4_trl3_273K_P0_0_cDAl2Fe11_1',
+            name(
+                potl_index=42,
+                bcc=True,
+                repeat=4,
+                trial=3,
+                temperature=273,
+                pressure=0.,
+                c_D03_anti_Al_to_Fe=0.1111111,
+                ndigits=1
+            )
+        )
+        self.assertEqual('foo', name.string, msg="Calling shouldn't overwrite the base object.")

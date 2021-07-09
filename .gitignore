@@ -12,4 +12,7 @@ projects
 *.log
 *.out
 *.pdf
+!writeup/supplementary/figures/*.pdf
+!writeup/main/figures/*.pdf
+!figures/*.pdf
 *.gz

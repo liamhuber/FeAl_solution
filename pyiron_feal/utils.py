@@ -14,6 +14,14 @@ __status__ = "development"
 __date__ = "Jun 10, 2021"
 
 
+def self_if_arg_is_none(fnc):
+    def wrapper(self, arg, **kwargs):
+        if arg is None:
+            return self
+        return fnc(self, arg, **kwargs)
+    return wrapper
+
+
 class JobName(str):
     @staticmethod
     def _filter_string(val):
@@ -22,32 +30,155 @@ class JobName(str):
     def __new__(cls, val):
         return super().__new__(cls, cls._filter_string(val))
 
-    def append(self, other):
-        return JobName(super(JobName, self).__add__('_' + self._filter_string(other)))
-
     @property
     def string(self):
         return str(self)
 
-    @staticmethod
-    def _round(number):
-        return round(number, ndigits=2)
+    def __call__(
+            self,
+            interactive=False,
+            potl_index=None,
+            bcc=False,
+            d03=False,
+            b2=False,
+            fcc=False,
+            a=None,
+            repeat=None,
+            trial=None,
+            pressure=None,
+            temperature=None,
+            c_Al=None,
+            c_D03_anti_Al_to_Fe=None,
+            c_D03_anti_aFe_to_Al=None,
+            c_D03_anti_bFe_to_Al=None,
+            c_B2_anti_Al_to_Fe=None,
+            c_B2_anti_Fe_to_Al=None,
+            max_cluster_fraction=None,
+            symbol_ref=None,
+            ndigits=2
+    ):
+        if interactive:
+            self = self.interactive
+        self = self.potl(potl_index)
+        if bcc:
+            self = self.bcc
+        if d03:
+            self = self.d03
+        if b2:
+            self = self.b2
+        if fcc:
+            self = self.fcc
+        self = self.a(a, ndigits=ndigits)
+        self = self.repeat(repeat)
+        self = self.trial(trial)
+        self = self.T(temperature, ndigits=ndigits)
+        self = self.P(pressure, ndigits=ndigits)
+        self = self.c_Al(c_Al, ndigits=ndigits)
+        self = self.c_D03_anti_Al_to_Fe(c_D03_anti_Al_to_Fe, ndigits=ndigits)
+        self = self.c_D03_anti_aFe_to_Al(c_D03_anti_aFe_to_Al, ndigits=ndigits)
+        self = self.c_D03_anti_bFe_to_Al(c_D03_anti_bFe_to_Al, ndigits=ndigits)
+        self = self.c_B2_anti_Al_to_Fe(c_B2_anti_Al_to_Fe, ndigits=ndigits)
+        self = self.c_B2_anti_Fe_to_Al(c_B2_anti_Fe_to_Al, ndigits=ndigits)
+        self = self.max_cluster_fraction(max_cluster_fraction, ndigits=ndigits)
+        self = self.symbol_ref(symbol_ref)
+        return self.string
 
-    def T(self, temperature):
-        return self.append(f'{self._round(temperature)}K')
+    @self_if_arg_is_none
+    def append(self, other):
+        return JobName(super(JobName, self).__add__('_' + self._filter_string(other)))
 
+    @property
+    def interactive(self):
+        return self.append('i')
+
+    @self_if_arg_is_none
     def potl(self, potl_index):
-        return self.append(f'potl{potl_index}')
+        return self.append(f'p{potl_index}')
 
-    def concentration(self, c_Al):
+    @property
+    def bcc(self):
+        return self.append('bcc')\
+
+    @property
+    def d03(self):
+        return self.append('d03')
+
+    @property
+    def b2(self):
+        return self.append('b2')
+
+    @property
+    def fcc(self):
+        return self.append('fcc')
+
+    @self_if_arg_is_none
+    def a(self, a, ndigits=2):
+        """Lattice constant."""
+        return self.append(f'a{round(a, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def repeat(self, n_reps):
+        """Cell repetition (integer only)."""
+        return self.append(f'r{n_reps}')
+
+    @self_if_arg_is_none
+    def trial(self, trial):
+        """Stochastic trial repetition."""
+        return self.append(f't{trial}')
+
+    @self_if_arg_is_none
+    def T(self, temperature, ndigits=2):
+        """Temperature."""
+        return self.append(f'{round(temperature, ndigits=ndigits)}K')
+
+    @self_if_arg_is_none
+    def P(self, pressure, ndigits=2):
+        """Pressure."""
+        return self.append(f'P{round(pressure, ndigits=ndigits)}')
+
+    def _concentration(self, c, ndigits=2):
+        try:
+            return round(c * 100, ndigits=ndigits)
+        except TypeError:
+            return c.lower()[:3]
+
+    @self_if_arg_is_none
+    def c_Al(self, c_Al, ndigits=2):
         """Given Al atomic fraction, gives name with Al atomic percentage."""
-        return self if c_Al is None else self.append(f'cAl{self._round(c_Al * 100)}')
+        return self.append(f'cAl{self._concentration(c_Al, ndigits=ndigits)}')
 
-    def cell_reps(self, n_reps):
-        return self if n_reps is None else self.append(f'cellr{n_reps}')
+    @self_if_arg_is_none
+    def c_D03_anti_Al_to_Fe(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cDAl{self._concentration(c_antisites, ndigits=ndigits)}')
 
-    def stochastic_reps(self, n_reps):
-        return self if n_reps is None else self.append(f'v{n_reps}')
+    @self_if_arg_is_none
+    def c_D03_anti_aFe_to_Al(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cDaFe{self._concentration(c_antisites, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def c_D03_anti_bFe_to_Al(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cDbFe{self._concentration(c_antisites, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def c_B2_anti_Al_to_Fe(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cBAl{self._concentration(c_antisites, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def c_B2_anti_Fe_to_Al(self, c_antisites, ndigits=2):
+        """Given Al atomic fraction, gives name with Al atomic percentage."""
+        return self.append(f'cBFe{self._concentration(c_antisites, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def max_cluster_fraction(self, fraction, ndigits=2):
+        return self.append(f'cf{round(fraction, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def symbol_ref(self, name):
+        return self.append(f'r{name}')
 
 
 class HasProject:

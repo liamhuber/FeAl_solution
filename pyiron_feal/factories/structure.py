@@ -35,48 +35,93 @@ class _FeAlStructures:
     Default cell size is 2x2x2 times the BCC unit cell in all cases, since that's the minimal cell for the D0_3 and
     consistency is a beautiful thing.
     """
-    _Al_at_frac = 0.18
+    _c_Al = 0.18
 
     def __init__(self, factory: StructureFactory):
         self._factory = factory
 
-    def BCC(self, a=None):
-        return self._factory.bulk('Fe', a=a, cubic=True)
+    def _double_unit(self, a=None):
+        return self._factory.bulk('Fe', a=a, cubic=True).repeat(2)
 
-    def B2(self, a=None):
-        struct = self.BCC(a=a)
-        struct[1] = 'Al'
-        return struct
+    @staticmethod
+    def _random_species_change(structure, valid_sites, concentration, new_symbol):
+        if isinstance(concentration, str) and concentration.lower() == 'dilute':
+            concentration = 1 / len(valid_sites)
+        elif concentration is None or np.isclose(concentration, 0):
+            return structure
 
-    def D03(self, a=None):
-        struct = self.BCC(a=a).repeat(2)
-        manually_identified_Al_sites = [5, 9, 3, 15]
-        struct[manually_identified_Al_sites] = 'Al'
-        return struct
+        n = len(valid_sites)
+        n_swaps = min(round(concentration * n), n)
+        structure[np.random.choice(valid_sites, n_swaps, replace=False)] = new_symbol
+        return structure
 
-    def random_BCC(self, a=None, repeat=2, Al_at_frac=None):
-        Al_at_frac = self._Al_at_frac if Al_at_frac is None else Al_at_frac
-        struct = self.BCC(a=a).repeat(repeat)
-        n_Al = round(Al_at_frac * len(struct))
-        struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
-        return struct
+    def bcc(self, a=None, repeat=1, c_Al=None):
+        structure = self._double_unit(a=a).repeat(repeat)
+        structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Al')
+        return structure
 
-    def FCC(self, a=None):
-        return self._factory.bulk(
+    @property
+    def d03_fractions(self):
+        """Fractions of the unit cell for each unique site type, aFe, bFe, and Al."""
+        return _D03Fractions()
+
+    def _d03_antisite_ids(self, structure, pre_swap_species, site_fraction):
+        """Finds all symmetrically unique sites in the structure with the target species and site fraction."""
+        equiv = structure.get_symmetry()['equivalent_atoms']
+        unique, counts = np.unique(equiv, return_counts=True)
+
+        sym = structure.get_chemical_symbols()
+        pre_swap_types = unique[sym[unique] == pre_swap_species]
+        site_type = pre_swap_types[np.argmin([np.abs(np.mean(equiv == i) - site_fraction) for i in pre_swap_types])]
+
+        return np.arange(len(structure))[equiv == site_type]
+
+    def d03(self, a=None, repeat=1, c_D03_anti_Al_to_Fe=None, c_D03_anti_aFe_to_Al=None, c_D03_anti_bFe_to_Al=None):
+        structure = self._double_unit(a=a)
+        structure[[5, 9, 3, 15]] = 'Al'
+        structure = structure.repeat(repeat)
+        Al_ids = self._d03_antisite_ids(structure, 'Al', self.d03_fractions.Al)
+        aFe_ids = self._d03_antisite_ids(structure, 'Fe', self.d03_fractions.aFe)
+        bFe_ids = self._d03_antisite_ids(structure, 'Fe', self.d03_fractions.bFe)
+        structure = self._random_species_change(structure, Al_ids, c_D03_anti_Al_to_Fe, 'Fe')
+        structure = self._random_species_change(structure, aFe_ids, c_D03_anti_aFe_to_Al, 'Al')
+        structure = self._random_species_change(structure, bFe_ids, c_D03_anti_bFe_to_Al, 'Al')
+        return structure
+
+    def b2(self, a=None, repeat=1, c_B2_anti_Al_to_Fe=None, c_B2_anti_Fe_to_Al=None):
+        structure = self._double_unit(a=a)
+        structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
+        structure = structure.repeat(repeat)
+        half_the_sites = np.arange(0, len(structure), 2, dtype='int')
+        structure = self._random_species_change(structure, half_the_sites, c_B2_anti_Fe_to_Al, 'Al')
+        structure = self._random_species_change(structure, half_the_sites + 1, c_B2_anti_Al_to_Fe, 'Fe')
+        return structure
+
+    @property
+    def _fcc_lattice_constant(self):
+        d_1nn = self._double_unit().get_neighbors(num_neighbors=1, id_list=[0]).distances[0, 0]
+        return d_1nn * np.sqrt(2)
+
+    def fcc(self, a=None, repeat=1, c_Al=None):
+        structure = self._factory.bulk(
             'Fe',
             crystalstructure='fcc',
             a=a if a is not None else self._fcc_lattice_constant,
             cubic=True
-        )
+        ).repeat(int(2 * repeat))
+        structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Al')
+        return structure
+
+
+class _D03Fractions:
+    @property
+    def Al(self):
+        return 0.25
 
     @property
-    def _fcc_lattice_constant(self):
-        d_1NN = self.BCC().get_neighbors(num_neighbors=1, id_list=[0]).distances[0, 0]
-        return d_1NN * np.sqrt(2)
+    def aFe(self):
+        return 0.5
 
-    def random_FCC(self, a=None, repeat=2, Al_at_frac=None):
-        Al_at_frac = self._Al_at_frac if Al_at_frac is None else Al_at_frac
-        struct = self.FCC(a=a).repeat(repeat)
-        n_Al = round(Al_at_frac * len(struct))
-        struct[np.random.choice(range(len(struct)), n_Al, replace=False)] = 'Al'
-        return struct
+    @property
+    def bFe(self):
+        return 0.25
