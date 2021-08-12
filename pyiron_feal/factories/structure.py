@@ -76,9 +76,23 @@ class _FeAlStructures:
 
         return np.arange(len(structure))[equiv == site_type]
 
-    def d03(self, a=None, repeat=1, c_D03_anti_Al_to_Fe=None, c_D03_anti_aFe_to_Al=None, c_D03_anti_bFe_to_Al=None):
+    def d03(
+            self,
+            a=None,
+            repeat=1,
+            c_D03_anti_Al_to_Fe=None,
+            c_D03_anti_aFe_to_Al=None,
+            c_D03_anti_bFe_to_Al=None,
+            basis=0
+    ):
         structure = self._double_unit(a=a)
-        structure[[5, 9, 3, 15]] = 'Al'
+        Al_site_bases = [
+            [3, 5, 9, 15],
+            [1, 7, 11, 13],
+            [0, 6, 10, 12],
+            [2, 4, 8, 14]
+        ]
+        structure[Al_site_bases[basis]] = 'Al'
         structure = structure.repeat(repeat)
         Al_ids = self._d03_antisite_ids(structure, 'Al', self.d03_fractions.Al)
         aFe_ids = self._d03_antisite_ids(structure, 'Fe', self.d03_fractions.aFe)
@@ -88,9 +102,16 @@ class _FeAlStructures:
         structure = self._random_species_change(structure, bFe_ids, c_D03_anti_bFe_to_Al, 'Al')
         return structure
 
-    def b2(self, a=None, repeat=1, c_B2_anti_Al_to_Fe=None, c_B2_anti_Fe_to_Al=None):
+    def b2(
+            self,
+            a=None,
+            repeat=1,
+            c_B2_anti_Al_to_Fe=None,
+            c_B2_anti_Fe_to_Al=None,
+            basis=1
+    ):
         structure = self._double_unit(a=a)
-        structure[np.arange(1, len(structure), 2, dtype=int)] = 'Al'
+        structure[np.arange(basis, len(structure), 2, dtype=int)] = 'Al'
         structure = structure.repeat(repeat)
         half_the_sites = np.arange(0, len(structure), 2, dtype='int')
         structure = self._random_species_change(structure, half_the_sites, c_B2_anti_Fe_to_Al, 'Al')
