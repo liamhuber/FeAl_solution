@@ -3,7 +3,8 @@
 # Distributed under the terms of "New BSD License", see the LICENSE file.
 
 from unittest import TestCase
-from pyiron_feal.utils import JobName
+from pyiron_feal.utils import JobName, bfs
+import numpy as np
 
 
 class TestJobName(TestCase):
@@ -58,3 +59,52 @@ class TestJobName(TestCase):
             )
         )
         self.assertEqual('foo', name.string, msg="Calling shouldn't overwrite the base object.")
+
+
+class TestBFS(TestCase):
+
+    def test_bfs(self):
+        """
+        0  1  2  3
+        4  5  6  7
+        8  9  10 11
+        12 13 14 15
+
+        x x x o
+        x x o o
+        x x x o
+        x x x o
+        """
+        l = 4
+        nodes = np.arange(l*l, dtype=int)
+        nodegrid = np.reshape(nodes, (l, l))
+        topology = np.stack(
+            (
+                np.roll(nodegrid, 1, axis=1),
+                np.roll(nodegrid, -1, axis=1),
+                np.roll(nodegrid, 1, axis=0),
+                np.roll(nodegrid, -1, axis=0),
+            ),
+            axis=-1
+        ).reshape(l*l, -1)
+
+        signature = np.array('x x x o x x o o x x x o x x x o'.split())
+
+        def condition(i, j, topo, sig, thresh):
+            return (sig[i] == sig[j]) and (np.sum(sig[topo[j]] == sig[j]) >= thresh)
+
+        self.assertCountEqual(
+            [9, 13, 1],
+            bfs(9, topology, condition, topo=topology, sig=signature, thresh=4).tolist(),
+            msg="Should only get x's completely surrounded by x's. Don't forget we have periodic boundary conditions."
+        )
+        self.assertCountEqual(
+            nodes[signature == 'x'].tolist(),
+            bfs(9, topology, condition, topo=topology, sig=signature, thresh=0).tolist(),
+            msg="With no threshold, should get all nodes with the same signature."
+        )
+        self.assertCountEqual(
+            [3, 7, 11, 15],
+            bfs(7, topology, condition, topo=topology, sig=signature, thresh=2).tolist(),
+            msg="Should be getting that righthand column, minus the nub at 6."
+        )
