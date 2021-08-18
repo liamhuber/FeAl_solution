@@ -6,7 +6,7 @@ from pyiron_atomistics import Project as ProjectCore
 from pyiron_feal.factories.structure import StructureFactory
 from pyiron_feal.factories.job import JobFactory
 from pyiron_base import DataContainer
-from pyiron_feal.subroutines import ZeroK
+from pyiron_feal.subroutines import ZeroK, MCMDSRO
 import numpy as np
 
 
@@ -58,6 +58,7 @@ class Project(ProjectCore):
         self.create._structure = StructureFactory()
         self.create._job_factory = JobFactory(self)
         self._zerok = ZeroK(self)
+        self._mcmd_sro = MCMDSRO(self)
 
     @property
     def input(self) -> ProjectInput:
@@ -71,6 +72,10 @@ class Project(ProjectCore):
     @property
     def zerok(self):
         return self._zerok
+
+    @property
+    def mcmd_sro(self):
+        return self._mcmd_sro
 
     def lammps_potl_to_string(self, potl_name):
         return ' '.join(potl_name.split('--')[:2]).replace('-', ' ')
