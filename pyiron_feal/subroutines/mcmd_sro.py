@@ -51,6 +51,82 @@ def _condition(_, site, e1, e2, topo, thresh=None):
     return _environment_matches(site, e1, e2, topo, thresh=thresh)
 
 
+class _Binned:
+    """Doesn't account for overlap AT ALL"""
+    def __init__(self, cluster, include_singlets=False):
+        self._cluster = cluster
+        self.include_singlets = include_singlets
+
+    @staticmethod
+    def roundten(x):
+        """Because 10 is the bin size Yue uses"""
+        return int(np.ceil(x / 10.0)) * 10
+
+    def _count_em(self, phase):
+        hist = {}
+
+        for k, v in self._cluster.stats.items():
+            if phase not in k:
+                continue
+
+            real_clusters = v if (self.include_singlets or v[0, 0] != 1) else v[1:]
+            for counts in real_clusters:
+                try:
+                    hist[self.roundten(counts[0])] += counts[1]
+                except KeyError:
+                    hist[self.roundten(counts[0])] = counts[1]
+
+        data = np.array([[k, v] for k, v in hist.items()])
+        return data[np.argsort(data[:, 0])]
+
+    @property
+    def d03(self):
+        return self._count_em('d03')
+
+    @property
+    def b2(self):
+        return self._count_em('b2')
+
+    @property
+    def singlets(self):
+        phases = np.unique([k.split('_')[0] for k in self._cluster.data.keys()])
+        singlets = {k: 0 for k in phases}
+        for k, v in self._cluster.stats.items():
+            phase = k.split('_')[0]
+            singlets[phase] += v[0, 1] if v[0, 0] == 1 else 0
+        return singlets
+
+
+class _ClusterData:
+    def __init__(self, cluster_dict):
+        self._dict = cluster_dict
+        self._binned = _Binned(self)
+
+    @property
+    def data(self):
+        return self._dict
+
+    @property
+    def stats(self):
+        return {k: np.array(np.unique([len(c) for c in v], return_counts=True)).T for k, v in self.data.items()}
+
+    @property
+    def binned(self):
+        return self._binned
+
+    def __str__(self):
+        return str(self.stats)
+
+    def __repr__(self):
+        return str(self.stats)
+
+    def __getitem__(self, item):
+        return self._dict[item]
+
+    def __getattr__(self, item):
+        return self._dict[item]
+
+
 class _Cluster:
     """
     A class for building clusters of like-environments.
@@ -118,7 +194,7 @@ class _Cluster:
     def __call__(self, env, threshold=np.nan):
         if not np.isnan(threshold):
             self.threshold = threshold
-        return self.get_clusters(env)
+        return _ClusterData(self.get_clusters(env))
 
 
 class MCMDSRO(HasProject):
