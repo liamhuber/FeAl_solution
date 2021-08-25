@@ -114,6 +114,21 @@ class _ClusterData:
     def binned(self):
         return self._binned
 
+    def _get_sizes(self, key):
+        sizes = []
+        for k, v in self.data.items():
+            if key in k:
+                sizes += [len(c) for c in v]
+        return np.array(sizes, dtype=int)
+
+    @property
+    def d03(self):
+        return self._get_sizes('d03')
+
+    @property
+    def b2(self):
+        return self._get_sizes('b2')
+
     def __str__(self):
         return str(self.stats)
 
