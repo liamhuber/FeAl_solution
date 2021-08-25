@@ -135,8 +135,7 @@ class _FeAlStructures:
 
     def columnar_b2(self, planar_repeats=1):
         structure = self._factory.bulk('Fe', cubic=True).repeat((planar_repeats, planar_repeats, 1))
-        origin_column = np.all(structure.positions[:, [0, 1]] < 1e-3, axis=1)
-        structure[origin_column] = 'Al'
+        structure[0] = 'Al'
         return structure
 
 

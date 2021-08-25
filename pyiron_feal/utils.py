@@ -44,6 +44,7 @@ class JobName(str):
             d03=False,
             b2=False,
             fcc=False,
+            columnar=False,
             a=None,
             repeat=None,
             trial=None,
@@ -70,6 +71,8 @@ class JobName(str):
             self = self.b2
         if fcc:
             self = self.fcc
+        if columnar:
+            self = self.columnar
         self = self.a(a, ndigits=ndigits)
         self = self.repeat(repeat)
         self = self.trial(trial)
@@ -112,6 +115,10 @@ class JobName(str):
     @property
     def fcc(self):
         return self.append('fcc')
+
+    @property
+    def columnar(self):
+        return self.append('columnar')
 
     @self_if_arg_is_none
     def a(self, a, ndigits=2):
