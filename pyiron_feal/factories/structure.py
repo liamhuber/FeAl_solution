@@ -133,6 +133,12 @@ class _FeAlStructures:
         structure = self._random_species_change(structure, np.arange(len(structure)), c_Al, 'Al')
         return structure
 
+    def columnar_b2(self, planar_repeats=1):
+        structure = self._factory.bulk('Fe', cubic=True).repeat((planar_repeats, planar_repeats, 1))
+        origin_column = np.all(structure.positions[:, [0, 1]] < 1e-3, axis=1)
+        structure[origin_column] = 'Al'
+        return structure
+
 
 class _D03Fractions:
     @property
