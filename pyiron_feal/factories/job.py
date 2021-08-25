@@ -161,6 +161,20 @@ class _Minimize(HasProject):
             delete_existing_job=delete_existing_job
         )
 
+    def layered(self, potl_index=0, pressure=0, delete_existing_job=False, layers=1):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                layered=True,
+                repeat=layers,
+                pressure=pressure,
+            ),
+            structure=self.project.create.structure.FeAl.layered_Al(layers=layers),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
+
     def interactive_cluster(
             self,
             potl_index=0,

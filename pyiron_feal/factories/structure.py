@@ -138,6 +138,11 @@ class _FeAlStructures:
         structure[0] = 'Al'
         return structure
 
+    def layered_Al(self, layers=1):
+        structure = self._factory.bulk('Fe', cubic=True).repeat((layers, 1, 1))
+        structure[0] = 'Al'
+        return structure
+
 
 class _D03Fractions:
     @property

@@ -45,6 +45,7 @@ class JobName(str):
             b2=False,
             fcc=False,
             columnar=False,
+            layered=False,
             a=None,
             repeat=None,
             trial=None,
@@ -73,6 +74,8 @@ class JobName(str):
             self = self.fcc
         if columnar:
             self = self.columnar
+        if layered:
+            self = self.layered
         self = self.a(a, ndigits=ndigits)
         self = self.repeat(repeat)
         self = self.trial(trial)
@@ -119,6 +122,10 @@ class JobName(str):
     @property
     def columnar(self):
         return self.append('columnar')
+
+    @property
+    def layered(self):
+        return self.append('layered')
 
     @self_if_arg_is_none
     def a(self, a, ndigits=2):
