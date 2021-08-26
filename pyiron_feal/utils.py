@@ -2,6 +2,8 @@
 # Copyright (c) Max-Planck-Institut für Eisenforschung GmbH - Computational Materials Design (CM) Department
 # Distributed under the terms of "New BSD License", see the LICENSE file.
 
+import numpy as np
+
 __author__ = "Liam Huber"
 __copyright__ = (
     "Copyright 2021, Max-Planck-Institut für Eisenforschung GmbH - "
@@ -42,6 +44,8 @@ class JobName(str):
             d03=False,
             b2=False,
             fcc=False,
+            columnar=False,
+            layered=False,
             a=None,
             repeat=None,
             trial=None,
@@ -68,6 +72,10 @@ class JobName(str):
             self = self.b2
         if fcc:
             self = self.fcc
+        if columnar:
+            self = self.columnar
+        if layered:
+            self = self.layered
         self = self.a(a, ndigits=ndigits)
         self = self.repeat(repeat)
         self = self.trial(trial)
@@ -110,6 +118,14 @@ class JobName(str):
     @property
     def fcc(self):
         return self.append('fcc')
+
+    @property
+    def columnar(self):
+        return self.append('columnar')
+
+    @property
+    def layered(self):
+        return self.append('layered')
 
     @self_if_arg_is_none
     def a(self, a, ndigits=2):
@@ -188,3 +204,28 @@ class HasProject:
     @property
     def project(self):
         return self._project
+
+
+def bfs(node, topology, condition_fnc, **condition_kwargs):
+    """
+    Breadth first search building a cluster starting at one node and obeying a condition function for adding new nodes.
+
+    Args:
+        node (int): Which node to start the search from.
+        topology (numpy.ndarray | list): Per-site list of lists giving the all neighbouring nodes (i.e. a
+            `neighbors.indices` object).
+        condition_fnc (fnc): A function for evaluating whether or not connected nodes should be added.
+        *condition_args: Additional arguments for the condition function.
+
+    Returns:
+        (numpy.ndarray): The cluster built from the requested node obeying the condition function.
+    """
+    cluster = [node]
+    queue = [node]
+    while queue:
+        i = queue.pop()
+        to_add = [j for j in topology[i] if condition_fnc(i, j, **condition_kwargs)]
+        queue += np.setdiff1d(to_add, cluster).astype(int).tolist()
+        cluster = np.unique(cluster + to_add).astype(int).tolist()
+
+    return np.array(cluster)

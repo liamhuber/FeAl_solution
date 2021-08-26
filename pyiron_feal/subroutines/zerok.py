@@ -74,6 +74,24 @@ class ZeroK(HasProject):
             **other_job_kwargs
         )
 
+    @lru_cache()
+    def get_columnar_b2_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
+        return self._get_peratom_energy(
+            self.project.create.job.minimize.columnar_b2,
+            potl_index=potl_index,
+            run_again=run_again,
+            **other_job_kwargs
+        )
+
+    @lru_cache()
+    def get_layered_peratom_energy(self, potl_index=0, run_again=False, **other_job_kwargs):
+        return self._get_peratom_energy(
+            self.project.create.job.minimize.layered,
+            potl_index=potl_index,
+            run_again=run_again,
+            **other_job_kwargs
+        )
+
     def plot_phases_0K(self, potl_index=0, ax=None, label_points=True, label_x=True, label_y=True, relative=True):
         (fig, ax) = plt.subplots() if ax is None else (None, ax)
         e_fcc = self.get_fcc_peratom_energy(potl_index=potl_index)

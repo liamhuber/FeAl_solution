@@ -147,6 +147,34 @@ class _Minimize(HasProject):
             delete_existing_job=delete_existing_job
         )
 
+    def columnar_b2(self, potl_index=0, pressure=0, delete_existing_job=False, planar_repeats=1):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                columnar=True,
+                repeat=planar_repeats,
+                pressure=pressure,
+            ),
+            structure=self.project.create.structure.FeAl.columnar_b2(planar_repeats=planar_repeats),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
+
+    def layered(self, potl_index=0, pressure=0, delete_existing_job=False, layers=1):
+        return self._lammps_minimization(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                layered=True,
+                repeat=layers,
+                pressure=pressure,
+            ),
+            structure=self.project.create.structure.FeAl.layered_Al(layers=layers),
+            pressure=pressure,
+            delete_existing_job=delete_existing_job
+        )
+
     def interactive_cluster(
             self,
             potl_index=0,
