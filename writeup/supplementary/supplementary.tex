@@ -1,18 +1,26 @@
 \input{../boilerplate}
 
-\title{Supplementary: \titletext}
+\title{\titletext}
 \input{../authors}
 
 \begin{document}
     \maketitle
 
+    \section{Motivation}
+        \label{sec:motivation}
+        \input{sections/motivation}
+
     \section{Computational details}
         \label{sec:computational}
         \input{sections/computational}
 
-    \section{Potential selection}
-        \label{sec:zerok}
-        \input{sections/zerok}
+    \section{Results}
+        \label{sec:results}
+        \input{sections/results.tex}
+
+    \section{Conclusion}
+        \label{sec:conclusion}
+        \input{sections/conclusion}
 
     \bibliography{../references}
     \bibliographystyle{plain}
