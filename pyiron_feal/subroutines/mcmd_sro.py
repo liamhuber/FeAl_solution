@@ -4,7 +4,7 @@
 
 from pyiron_feal.utils import HasProject, bfs
 import numpy as np
-from functools import lru_cache, cached_property
+from functools import lru_cache
 from pyiron_base import GenericJob
 from scipy.constants import physical_constants
 KB = physical_constants['Boltzmann constant in eV/K'][0]
@@ -234,19 +234,23 @@ class _SizeRef(HasProject):
         self._d03 = _SymbolGenerator(project.create.structure.FeAl.d03, repeats)
         self._b2 = _SymbolGenerator(project.create.structure.FeAl.b2, repeats)
 
-    @cached_property
+    @property
+    @lru_cache()
     def d03_0(self):
         return self._d03(0)
 
-    @cached_property
+    @property
+    @lru_cache()
     def d03_1(self):
         return self._d03(1)
 
-    @cached_property
+    @property
+    @lru_cache()
     def d03_2(self):
         return self._d03(2)
 
-    @cached_property
+    @property
+    @lru_cache()
     def d03_3(self):
         return self._d03(3)
 
