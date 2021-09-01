@@ -237,3 +237,10 @@ class MCMDSRO(HasProject):
                 *all* neighbors to match.)
         """
         self._cluster = _Cluster(topology, reference_environments, threshold=threshold)
+
+    def remap_species(self, job, species_frame=-1, positions_frame=0):
+        structure = job.get_structure(positions_frame)
+        symbols = job.get_structure(species_frame).get_chemical_symbols()
+        structure[symbols == 'Fe'] = 'Fe'
+        structure[symbols == 'Al'] = 'Al'
+        return structure
