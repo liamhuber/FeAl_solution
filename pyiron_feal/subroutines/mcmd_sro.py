@@ -4,7 +4,7 @@
 
 from pyiron_feal.utils import HasProject, bfs
 import numpy as np
-from functools import lru_cache
+from functools import lru_cache, cached_property
 from pyiron_base import GenericJob
 from scipy.constants import physical_constants
 KB = physical_constants['Boltzmann constant in eV/K'][0]
@@ -212,17 +212,78 @@ class _Cluster:
         return _ClusterData(self.get_clusters(env))
 
 
+class _RefSymbols(HasProject):
+
+    def __init__(self, project):
+        super().__init__(project)
+        self._small = _SizeRef(self.project, self.project.create.structure.FeAl.supercell_repeats.four_nm_cube)
+        self._experiment = _SizeRef(self.project, self.project.create.structure.FeAl.supercell_repeats.experiment)
+
+    @property
+    def small_cube(self):
+        return self._small
+
+    @property
+    def experimental_size(self):
+        return self._experiment
+
+
+class _SizeRef(HasProject):
+    def __init__(self, project, repeats):
+        super().__init__(project)
+        self._d03 = _SymbolGenerator(project.create.structure.FeAl.d03, repeats)
+        self._b2 = _SymbolGenerator(project.create.structure.FeAl.b2, repeats)
+
+    @cached_property
+    def d03_0(self):
+        return self._d03(0)
+
+    @cached_property
+    def d03_1(self):
+        return self._d03(1)
+
+    @cached_property
+    def d03_2(self):
+        return self._d03(2)
+
+    @cached_property
+    def d03_3(self):
+        return self._d03(3)
+
+    @property
+    def b2_0(self):
+        return self._b2(0)
+
+    @property
+    def b2_1(self):
+        return self._b2(1)
+
+
+class _SymbolGenerator:
+    def __init__(self, creator, repeats):
+        self._creator = creator
+        self._repeats = repeats
+
+    def __call__(self, basis):
+        return self._creator(repeat=self._repeats, basis=basis).get_chemical_symbols()
+
+
 class MCMDSRO(HasProject):
 
     def __init__(self, project):
         super().__init__(project)
         self._cluster = None
+        self._ref_symbols = _RefSymbols(project)
 
     @property
     def cluster(self):
         if self._cluster is None:
             raise ValueError('First run define_clustering')
         return self._cluster
+
+    @property
+    def reference_symbols(self):
+        return self._ref_symbols
 
     def define_clustering(self, topology, reference_environments, threshold=None):
         """
