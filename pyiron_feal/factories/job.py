@@ -21,10 +21,15 @@ class JobFactory(JobFactoryCore):
     def __init__(self, project):
         super().__init__(project)
         self._minimize = _Minimize(project)
+        self._mcmd = _MCMD(project)
 
     @property
     def minimize(self):
         return self._minimize
+
+    @property
+    def mcmd(self):
+        return self._mcmd
 
 
 class _Minimize(HasProject):
@@ -204,4 +209,125 @@ class _Minimize(HasProject):
             structure=self.project.create.structure.FeAl.bcc(a=a, repeat=repeat, c_Al=c_Al),
             pressure=pressure,
             delete_existing_job=delete_existing_job
+        )
+
+
+class _MCMD(HasProject):
+    """
+    Actually job creation routines -- loads the job if it already exists.
+    """
+
+    def __init__(self, project):
+        super().__init__(project)
+        self.name = JobName('mcmd')
+
+    def _lammps_vcsgc(
+            self,
+            potl_index,
+            name,
+            structure,
+            temperature,
+            dmu,
+            c_Al,
+            delete_existing_job=False,
+            n_ionic_steps=1e4,
+            n_print=None,
+            kappa=1e4,
+            temperature_mc=None,
+            **other_vcsgc_kwargs
+    ):
+        n_print = n_ionic_steps if n_print is None else n_print
+        temperature_mc = temperature if temperature_mc is None else temperature_mc
+        job = self.project.load(name)
+        if job is None or delete_existing_job:
+            job = self.project.create.job.Lammps(name, delete_existing_job=delete_existing_job)
+            job.structure = structure
+            job.potential = self.project.input.potentials[potl_index]
+            job.calc_vcsgc(
+                temperature=temperature,
+                mu={'Fe': 0, 'Al': dmu},
+                target_concentration={'Fe': 1 - c_Al, 'Al': c_Al},
+                n_ionic_steps=n_ionic_steps,
+                n_print=n_print,
+                kappa=kappa,
+                temperature_mc=temperature_mc,
+                langevin=True,
+                **other_vcsgc_kwargs
+            )
+        return job
+
+    def small_cube(
+            self,
+            temperature,
+            potl_index=0,
+            dmu=0,
+            c_Al=0.18,
+            delete_existing_job=False,
+            n_ionic_steps=1e4,
+            n_print=None,
+            kappa=1e4,
+            temperature_mc=None,
+            **other_vcsgc_kwargs
+    ):
+        """Approx 4x4x4 nm. dmu < 0 drives to Al, dmu > 0 drives to Fe."""
+        return self._lammps_vcsgc(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                cube=True,
+                temperature=temperature,
+                dmu=dmu,
+                c_Al=c_Al,
+                n_steps=n_ionic_steps,
+                kappa=kappa,
+                temperature_mc=temperature_mc
+            ),
+            structure=self.project.create.structure.FeAl.bcc(repeat=7, c_Al=c_Al),
+            temperature=temperature,
+            dmu=dmu,
+            c_Al=c_Al,
+            delete_existing_job=delete_existing_job,
+            n_ionic_steps=n_ionic_steps,
+            n_print=n_print,
+            kappa=kappa,
+            temperature_mc=temperature_mc,
+            **other_vcsgc_kwargs
+        )
+
+    def experimental_size(
+            self,
+            temperature,
+            potl_index=0,
+            dmu=0,
+            c_Al=0.18,
+            delete_existing_job=False,
+            n_ionic_steps=1e4,
+            n_print=None,
+            kappa=1e4,
+            temperature_mc=None,
+            **other_vcsgc_kwargs
+    ):
+        """Approx 50x10x10 nm. dmu < 0 drives to Al, dmu > 0 drives to Fe."""
+        return self._lammps_vcsgc(
+            potl_index=potl_index,
+            name=self.name(
+                potl_index=potl_index,
+                experimental=True,
+                temperature=temperature,
+                dmu=dmu,
+                c_Al=c_Al,
+                n_steps=n_ionic_steps,
+                kappa=kappa,
+                temperature_mc=temperature_mc
+            ),
+            structure=self.project.create.structure.FeAl.bcc(repeat=(87, 18, 18), c_Al=c_Al),
+            temperature=temperature,
+            dmu=dmu,
+            c_Al=c_Al,
+            delete_existing_job=delete_existing_job,
+            n_ionic_steps=n_ionic_steps,
+            n_print=n_print,
+            kappa=kappa,
+            temperature_mc=temperature_mc
+            **other_vcsgc_kwargs
         )

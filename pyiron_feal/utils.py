@@ -46,6 +46,8 @@ class JobName(str):
             fcc=False,
             columnar=False,
             layered=False,
+            cube=False,
+            experimental=False,
             a=None,
             repeat=None,
             trial=None,
@@ -59,6 +61,10 @@ class JobName(str):
             c_B2_anti_Fe_to_Al=None,
             max_cluster_fraction=None,
             symbol_ref=None,
+            dmu=None,
+            n_steps=None,
+            kappa=None,
+            temperature_mc=None,
             ndigits=2
     ):
         if interactive:
@@ -76,6 +82,10 @@ class JobName(str):
             self = self.columnar
         if layered:
             self = self.layered
+        if cube:
+            self = self.cube
+        if experimental:
+            self = self.experimental
         self = self.a(a, ndigits=ndigits)
         self = self.repeat(repeat)
         self = self.trial(trial)
@@ -89,6 +99,10 @@ class JobName(str):
         self = self.c_B2_anti_Fe_to_Al(c_B2_anti_Fe_to_Al, ndigits=ndigits)
         self = self.max_cluster_fraction(max_cluster_fraction, ndigits=ndigits)
         self = self.symbol_ref(symbol_ref)
+        self = self.dmu(dmu, ndigits=ndigits)
+        self = self.n_steps(n_steps)
+        self = self.kappa(kappa)
+        self = self.Tmc(temperature_mc, ndigits=ndigits)
         return self.string
 
     @self_if_arg_is_none
@@ -126,6 +140,14 @@ class JobName(str):
     @property
     def layered(self):
         return self.append('layered')
+
+    @property
+    def cube(self):
+        return self.append('cube')
+
+    @property
+    def experimental(self):
+        return self.append('expt')
 
     @self_if_arg_is_none
     def a(self, a, ndigits=2):
@@ -195,6 +217,26 @@ class JobName(str):
     @self_if_arg_is_none
     def symbol_ref(self, name):
         return self.append(f'r{name}')
+
+    @self_if_arg_is_none
+    def dmu(self, dmu, ndigits=2):
+        """Chemical potential difference."""
+        return self.append(f'mu{round(dmu, ndigits=ndigits)}')
+
+    @self_if_arg_is_none
+    def n_steps(self, n_steps):
+        """Steps."""
+        return self.append(f'n{int(n_steps)}')
+
+    @self_if_arg_is_none
+    def kappa(self, kappa):
+        """Variance constraint."""
+        return self.append(f'k{int(kappa)}')
+
+    @self_if_arg_is_none
+    def Tmc(self, temperature, ndigits=2):
+        """Monte Carlo temperature."""
+        return self.append(f'mc{round(temperature, ndigits=ndigits)}K')
 
 
 class HasProject:
