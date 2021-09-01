@@ -143,6 +143,10 @@ class _FeAlStructures:
         structure[0] = 'Al'
         return structure
 
+    @property
+    def supercell_repeats(self):
+        return _SuperRepeats()
+
 
 class _D03Fractions:
     @property
@@ -156,3 +160,13 @@ class _D03Fractions:
     @property
     def bFe(self):
         return 0.25
+
+
+class _SuperRepeats:
+    @property
+    def four_nm_cube(self):
+        return 7
+
+    @property
+    def experiment(self):
+        return (87, 18, 18)

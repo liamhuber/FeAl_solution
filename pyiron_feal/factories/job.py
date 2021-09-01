@@ -282,7 +282,10 @@ class _MCMD(HasProject):
                 kappa=kappa,
                 temperature_mc=temperature_mc
             ),
-            structure=self.project.create.structure.FeAl.bcc(repeat=7, c_Al=c_Al),
+            structure=self.project.create.structure.FeAl.bcc(
+                repeat=self.project.create.structure.FeAl.supercell_repeats.four_nm_cube,
+                c_Al=c_Al
+            ),
             temperature=temperature,
             dmu=dmu,
             c_Al=c_Al,
@@ -320,7 +323,10 @@ class _MCMD(HasProject):
                 kappa=kappa,
                 temperature_mc=temperature_mc
             ),
-            structure=self.project.create.structure.FeAl.bcc(repeat=(87, 18, 18), c_Al=c_Al),
+            structure=self.project.create.structure.FeAl.bcc(
+                repeat=self.project.create.structure.FeAl.supercell_repeats.experiment,
+                c_Al=c_Al
+            ),
             temperature=temperature,
             dmu=dmu,
             c_Al=c_Al,
