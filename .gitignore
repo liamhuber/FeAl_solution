@@ -16,3 +16,4 @@ projects
 !writeup/main/figures/*.pdf
 !figures/*.pdf
 *.gz
+figures/structures.pptx
