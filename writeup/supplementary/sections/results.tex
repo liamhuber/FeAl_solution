@@ -26,3 +26,25 @@ Constructing a parallel tangent line between the minima of the phases, we can ex
 The potential energy of this layered structure sits so far below the \DOTHREE phase that we should never expect to see \DOTHREE form in any significant fraction.
 Second, for the Lee potential, a similar Gibbs-tie-line analysis shows that decomposition into solid solution and \DOTHREE \emph{is} possible, but may only occur at higher temperatures than we expect from experiment.
 This potential seems to have an unphysically low solubility of Al in bulk BCC Fe.
+
+Next, to allow the full interplay and competition of all factors including vibrational entropy, we perform full MCMD calculations using the variance constrained approach~\cite{sadigh2012calculation, sadigh2012scalable} (with a relatively strict constraint $\kappa = 1e4$) to maintain the Al concentration very close to the nominal experimental value of 18\%.
+Estimating the chemical potential, $\Delta \mu$ from the change in 0~K potential energies of the most favourable phases -- BCC and \DOTHREE (layered Al) for the Lee (Mendelev) potential -- gives $|\Delta \mu| < 0.1~\mathrm{eV}$ ($<0.3~\mathrm{eV}$) for the Lee (Mendelev) potential.
+As seen by the inclusion of just configurational entropy to the solid solution phase, this is very likely to be an upper bound to the true chemical potential.
+Since the application of the variance constraint means that the chemical potential does not ultimately influence the nature of the results obtained but only the computational efficiency (i.e. number of MC steps required) we safely approximate $\Delta \mu 0 $ for both potentials.
+With a 1 fs timestep for integration, these simulations ran for 100 ps each, with MC trial swaps for 10\% of the atoms every 0.1 ps.
+Although smaller than the experimental dimensions, the simulation cells were of the same order of magnitude: $4\times4\times4$ nanometer periodic cubes.
+The convergence of the system to the desired chemical ordering can be seen by the good equilibration of the potential energy as a function of time in Fig.~\ref{fig:TODO}.
+
+Unlike the experimental APT data, we have full access to the species and position of each atom in our computational sample.
+Thus, to analyze SRO into the specific \DOTHREE and \BTWO configurations observed in experiment, we can directly check whether each atom has a local environment that matches the target phase.
+We do this by constructing the topology of our system considering all 14 first- and second-nearest neighbours (NN) to be ``connected'', and comparing the species of the atom under question as well as all of its neighbours to one of six references: two from the \BTWO pattern with Al occupying either simple-cubic sublattice, and four symmetry-equivalent organizations of \DOTHREE.
+Using a breadth-first-search, for each of the six reference patterns we construct all matching clusters.
+
+The size and number of clusters found is then dependent on how strictly one demands that the test environment match the reference environment;
+if we very strictly insist that each atom in a cluster be surrounded by \emph{exactly} the reference cluster, it is exceedingly difficult to find clusters beyond a few atoms in size given the entropic favourability of a random solution;
+however, at the opposite extreme, if we are too relaxed in our condition and allow atoms with only a few neighbours matching the reference to count towards a cluster, then the entire system is consumed with one erroneous ``cluster''.
+To overcome this we must make reference to the same clustering algorithm applied to the truly random solid solution used as input to the MCMD simulations, and consider the \emph{changes} in the cluster distribution after the sample has been allowed to equilibrate its chemical ordering.
+In principle, one can devise a max-entropy scheme to select a threshold number of matching neighbours which optimizes the difference between the cluster distributions for the random and equilibrated samples.
+In practice, we found that a threshold value of 11 of the 14 NN did a good job of this, and the interested reader can examine the \code{github} repository~\cite{github} for more detail.
+
+\todo{Results and plots: histograms and structures. Emphasize Bayesian prior of the initial random distribution. Highlight that we really do see planes/rods in the biggest cluster for Mendelev, and hopefully we'll see D03 for Lee!!!}
