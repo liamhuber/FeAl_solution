@@ -12,11 +12,18 @@ Nonetheless, for the rest of our investigation we can safely focus on the EAM po
 \end{figure}
 
 In addition to being BCC stable, we know that the potentials should be dominated by a solid solution at 18\% Al, and that the \DOTHREE phase should also be energetically competitive such that it has the chance of appearing as small SRO clusters.
-To this end, we expand the diagram in Fig.~\ref{fig:TODO} contains additional data including information about the random solid solution state at Al concentrations up to the nominal \DOTHREE concentration.
+To this end, we expand the diagram in Fig.~\ref{fig:expanded_0K_phases} contains additional data including information about the random solid solution state at Al concentrations up to the nominal \DOTHREE concentration.
 At each concentration ten different random configurations of 432 atoms ($6\times6\times6$ BCC units) we relaxed at zero pressure, and the final energy averaged over.
 The error bars for the solid solution shows the 95\% confidence interval from the sampling (i.e. roughly double the standard deviation).
 In addition to the solid solution and normal phases, we also show data for other ordered phases: columnar Al with varying inter-columnar spacing (similar to pin-like \BTWO precipitates) and planar Al wiht varying inter-planar spacing.
 Representatives of all of these are visualized in Fig.~\ref{fig:structures}.
+%
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/expanded_0K_phases}
+    \caption{0K potential energy/atom for the regular phases, but also columnar Al (orange circles), planar Al (green squares), and random solid solution including configurational entropy at three temperatures, 0~K, 523~K, and 873~K (triangles red, purple, and brown, respectively) with error bars showing a 95\% confidence interval for the average solution energy.}
+    \label{fig:expanded_0K_phases}
+\end{figure}
 %
 \begin{figure}[h]
     \centering
@@ -40,7 +47,16 @@ As seen by the inclusion of just configurational entropy to the solid solution p
 Since the application of the variance constraint means that the chemical potential does not ultimately influence the nature of the results obtained but only the computational efficiency (i.e. number of MC steps required) we safely approximate $\Delta \mu 0 $ for both potentials.
 With a 1 fs timestep for integration, these simulations ran for 100 ps each, with MC trial swaps for 10\% of the atoms every 0.1 ps.
 Although smaller than the experimental dimensions, the simulation cells were of the same order of magnitude: $4\times4\times4$ nanometer periodic cubes.
-The convergence of the system to the desired chemical ordering can be seen by the good equilibration of the potential energy as a function of time in Fig.~\ref{fig:TODO}.
+The convergence of the system to the desired chemical ordering can be seen by the good equilibration of the potential energy as a function of time in Fig.~\ref{fig:energy_conv} for all systems except for the Lee potential \todo{potl2} at 523~K.
+In light of Fig.~\ref{fig:expanded_0K_phases} we can understand this slow convergence since at this temperature we are most likely in a miscibility gap between very low concentration solid solution and \DOTHREE;
+because of the variance constraint the system then tries to completely decompose into two pure phases, which requires many MC swaps.
+%
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/energy_conv}
+    \caption{Total system potential energy convergence as a function of time (and thus MC swaps) for \todo{Mendelev=potl0, Lee=potl2}.}
+    \label{fig:energy_conv}
+\end{figure}
 
 Unlike the experimental APT data, we have full access to the species and position of each atom in our computational sample.
 Thus, to analyze SRO into the specific \DOTHREE and \BTWO configurations observed in experiment, we can directly check whether each atom has a local environment that matches the target phase.
@@ -48,10 +64,10 @@ We do this by constructing the topology of our system considering all 14 first- 
 Using a breadth-first-search, for each of the six reference patterns we construct all matching clusters.
 
 The size and number of clusters found is then dependent on how strictly one demands that the test environment match the reference environment;
-if we very strictly insist that each atom in a cluster be surrounded by \emph{exactly} the reference cluster, it is exceedingly difficult to find clusters beyond a few atoms in size given the entropic favourability of a random solution;
+if we very strictly insist that each atom in a cluster be surrounded by \emph{exactly} the reference cluster, it is more difficult to find clusters beyond a few atoms in size given the entropic favourability of point defects in the secondary phase;
 however, at the opposite extreme, if we are too relaxed in our condition and allow atoms with only a few neighbours matching the reference to count towards a cluster, then the entire system is consumed with one erroneous ``cluster''.
 To overcome this we must make reference to the same clustering algorithm applied to the truly random solid solution used as input to the MCMD simulations, and consider the \emph{changes} in the cluster distribution after the sample has been allowed to equilibrate its chemical ordering.
-In principle, one can devise a max-entropy scheme to select a threshold number of matching neighbours which optimizes the difference between the cluster distributions for the random and equilibrated samples.
-In practice, we found that a threshold value of 11 of the 14 NN did a good job of this, and the interested reader can examine the \code{github} repository~\cite{feal} for more detail.
+We found that a threshold value of 13 of the 14 NN prevented very many clusters from being identified in the random solution while still allowing for the chemically equilibrated systems (especially the Lee potential) to have multiple large clusters.
+The interested reader can examine the \code{github} repository~\cite{feal} for more detail.
 
 \todo{Results and plots: histograms and structures. Emphasize Bayesian prior of the initial random distribution. Highlight that we really do see planes/rods in the biggest cluster for Mendelev, and hopefully we'll see D03 for Lee!!!}
