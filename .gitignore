@@ -17,3 +17,4 @@ projects
 !figures/*.pdf
 *.gz
 writeup/supplementary/figures/*structures.pptx
+*.cmti001.*
