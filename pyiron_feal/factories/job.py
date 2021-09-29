@@ -267,21 +267,23 @@ class _MCMD(HasProject):
             n_print=None,
             kappa=1e4,
             temperature_mc=None,
+            name_override=None,
             **other_vcsgc_kwargs
     ):
         """Approx 4x4x4 nm. dmu < 0 drives to Al, dmu > 0 drives to Fe."""
+        name = name_override if name_override is not None else self.name(
+            potl_index=potl_index,
+            cube=True,
+            temperature=temperature,
+            dmu=dmu,
+            c_Al=c_Al,
+            n_steps=n_ionic_steps,
+            kappa=kappa,
+            temperature_mc=temperature_mc
+        )
         return self._lammps_vcsgc(
             potl_index=potl_index,
-            name=self.name(
-                potl_index=potl_index,
-                cube=True,
-                temperature=temperature,
-                dmu=dmu,
-                c_Al=c_Al,
-                n_steps=n_ionic_steps,
-                kappa=kappa,
-                temperature_mc=temperature_mc
-            ),
+            name=name,
             structure=self.project.create.structure.FeAl.bcc(
                 repeat=self.project.create.structure.FeAl.supercell_repeats.four_nm_cube,
                 c_Al=c_Al
