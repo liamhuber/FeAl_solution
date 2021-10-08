@@ -21,14 +21,14 @@ Representatives of all of these are visualized in Fig.~\ref{fig:structures}.
 %
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/expanded_0K_phases}
+    \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{figures/expanded_0K_phases}
     \caption{0K potential energy/atom for the regular phases, but also columnar Al (orange circles), planar Al (green squares), and random solid solution including configurational entropy at three temperatures, 0~K, 523~K, and 873~K (triangles red, purple, and brown, respectively) with error bars showing a 95\% confidence interval for the average solution energy.}
     \label{fig:expanded_0K_phases}
 \end{figure}
 %
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/structures}
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figures/structures}
     \caption{Representative visualizations of the structures for (a) FCC, (b) BCC (with 18\% Al), (c) \DOTHREE, (d) \BTWO, (e) the columnar structure, and (f) the planar structure. Al is shown small and grey while Fe is larger and red.}
     \label{fig:structures}
 \end{figure}
@@ -56,7 +56,7 @@ starting from an initial configuration of random solid solution with 18\% Al, th
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/energy_conv}
-    \caption{Total system potential energy convergence as a function of time (and thus MC swaps) for \todo{Mendelev=potl0, Lee=potl2}.}
+    \caption{Potential energy convergence as a function of time (and thus MC swaps) for Mendelev~\cite{mendelev2005effect} and Lee~\cite{lee2010modified} potentials at high and lower temperture.}
     \label{fig:energy_conv}
 \end{figure}
 
@@ -109,8 +109,8 @@ Just as the cold simulation starting from the random solution did not fully equi
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/decomposing_clusters}
-    \caption{Identified \DOTHREE clusters evolving with the Lee potential from an initial state of full BCC-\DOTHREE phase separation. Results for (a) 523 K and (b) 873 K show evolution through time with darker bars being later in the simulation.}
+    \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{figures/decomposing_clusters}
+    \caption{Identified \DOTHREE clusters evolving with the Lee potential from an initial state of full BCC-\DOTHREE phase separation. Results for (a) 523 K and (b) 873 K show evolution through time with darker bars being later in the simulation. Bins are truncated at 200.}
     \label{fig:lee_dissolution}
 \end{figure}
 
@@ -123,7 +123,7 @@ As with the other structure plots, the atoms are always mapped back to their lat
 %
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/equilibrated_mendelev_523}
+    \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{figures/equilibrated_mendelev_523}
     \caption{(a) one of the larger \BTWO clusters constructed with a more relaxed clustering condition of 11 NN and (b) the complete structure from the end of the MCMD equilibration with the Mendelev potential at 523~K.}
     \label{fig:mendelev_structure}
 \end{figure}
