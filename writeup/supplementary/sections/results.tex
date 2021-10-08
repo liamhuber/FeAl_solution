@@ -48,7 +48,7 @@ Since the application of the variance constraint means that the chemical potenti
 With a 1 fs timestep for integration, these simulations ran for 100 ps each, with MC trial swaps for 10\% of the atoms every 0.1 ps.
 Although smaller than the experimental dimensions, the simulation cells were of the same order of magnitude: $4\times4\times4$ nanometer periodic cubes (5488 atoms) in a periodic domain.
 We can get a quick sense of whether the system has converged to the desired chemical ordering by examining the equilibration of the potential energy as a function of time/MC steps.
-This is shown in Fig.~\ref{fig:energy_conv} where we see that all systems except for the Lee potential \todo{potl2} at 523~K have converged to fluctuate around the average energy of the back half of the simulation.
+This is shown in Fig.~\ref{fig:energy_conv} where we see that all systems except for the Lee potential at 523~K have converged to fluctuate around the average energy of the back half of the simulation.
 In contrast, the Lee potential at 523 K still shows a clear trend of decreasing energy, indicating that it has not reached its equilibrium configuration at all.
 This slow convergence can be understood in light of Fig.~\ref{fig:expanded_0K_phases}, since at this temperature we are most likely in a miscibility gap between very low concentration solid solution and \DOTHREE;
 starting from an initial configuration of random solid solution with 18\% Al, the system is trying to decompose into pure \DOTHREE and BCC with almost no Al, a process which requires many, many MC swaps.
@@ -56,7 +56,7 @@ starting from an initial configuration of random solid solution with 18\% Al, th
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/energy_conv}
-    \caption{Potential energy convergence as a function of time (and thus MC swaps) for Mendelev~\cite{mendelev2005effect} and Lee~\cite{lee2010modified} potentials at high and lower temperture.}
+    \caption{Potential energy convergence as a function of time (and thus MC swaps) for Mendelev~\cite{mendelev2005effect} and Lee~\cite{lee2010modified} potentials at high and lower temperture. Dashed line shows the average energy for the last five frames.}
     \label{fig:energy_conv}
 \end{figure}
 
@@ -119,7 +119,7 @@ Testing for columnar or planar precipitates is harder, because we do not have th
 However, both these shapes can be thought of as a very particularly arranged \BTWO precipitate.
 By weakening our clustering criterion to 11 out of 14 NN and examining some of the larger \BTWO clusters identified, we can indeed locate the formation of small plate-like precipitates which support the planar phase, shown in Fig.~\ref{fig:mendelev_structure}(a) where one of the larger clusters is plotted for the equilibrated system at 523~K.
 Partial columns of Al are also clearly visible in the full structure, also shown in Fig.~\ref{fig:mendelev_structure}(b).
-As with the other structure plots, the atoms are always mapped back to their lattice positions, even if they are the output of an MD trajectory and the snapshot with true positions looks more disorderly.
+As with the other structure plots, the atoms are always mapped back to their lattice positions, although their true atomic positions of the snapshot are disorderly as they are the output of an MD trajectory.
 %
 \begin{figure}[h]
     \centering
