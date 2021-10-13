@@ -80,8 +80,13 @@ Meanwhile, the Lee potential shows a similar non-result for \BTWO ordering, but 
 At 523 K we see one medium sized cluster (about 50 atoms) and ten small clusters in the 10-20 atom range,
 but this calculation was poorly converged.
 At 873 K the calculation was well converged and here we see four large clusters (>100 atoms, where the binning is truncated), as well as a collection of medium sized clusters, and some small clusters.
-This high temperature behaviour is fully consistent with the simplified ``phase diagram'' in Fig.~\ref{fig:expanded_0K_phases}, where we expect coexistence of moderately high Al-concentration BCC solid solution and \DOTHREE.
-The high Al content in the BCC provides the necessary Al content for small clusters to form to begin with, and the added configurational entropy of having more, smaller clusters may contribute to clustering as opposed to full phase separation.
+Note that this histogram is truncated at a size of 100, so the four counts at the largest size are actually all different sizes, each some hundreds of atoms.
+
+By referring back to our simplified ``phase diagram'' in Fig.~\ref{fig:expanded_0K_phases}, we can see that we expect to be in the miscibility gap between the solid solution and \DOTHREE phases.
+So, at 873 K where we see the formation of a whole distribution of clusters, are we really at a thermodynamic equilibrium or is this merely a transient state on the path to perfect phase separation?
+Even though we are inside a miscibility gap, and ignoring unlikely scenarios like an negative solid solution/\DOTHREE interface energy, there is still a clear explanation for why we may observe SRO instead of \emph{only} decomposition: while the system still wants to form \DOTHREE, there at higher temperatures there is an increased entropic benefit to allowing this \DOTHREE to occur in many small clusters spread throughout the system.
+In the classic image of a TTT diagram, we may be up above the nose, where the formation of a precipitate above the critical size for Ostwald ripening (i.e. completely stable against decomposition) becomes exceedingly unlikely -- or at least takes a very long time.
+Since the MCMD infrastructure is not well-optimized for MEAM potentials like the Lee potential, simply running much longer is not a desirable solution.
 
 %
 \begin{figure}[h]
@@ -94,24 +99,47 @@ The high Al content in the BCC provides the necessary Al content for small clust
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/lee_hist_thresh13}
-    \caption{Cluster counts (ignoring single atom ``clusters'') for the Lee potential before (blue) and after (orange) MCMD equilibration from a random mixture, shown for \DOTHREE and \BTWO reference phases at two different temperatures.}
+    \caption{Cluster counts (ignoring single atom ``clusters'') for the Lee potential before (blue) and after (orange) MCMD equilibration from a random mixture, shown for \DOTHREE and \BTWO reference phases at two different temperatures. Binning is truncated at 100, so larger clusters are all lumped into the final bin shown.}
     \label{fig:lee_hist}
 \end{figure}
 
-We can further test our results for the Lee potential by beginning our calculations from a state of full phase separation instead of random solution.
-In this case we have used a (rougly) spherical \DOTHREE coherent precipitate in the pure-Fe BCC bulk, with the size of the precipitate tuned so that the Al concentration is still 18\%.
-Results of the cluster analysis through time can be see in Fig.~\ref{fig:lee_dissolution} at both temperatures -- the histograms are truncated at 200 atoms, and the single cluster there represents the large initial cluster of roughly 4000 atoms.
+One alternative approach is to change our MCMD initial conditions by \emph{starting} from perfect phase separation instead of starting from random solution.
+In this case, at high temperature we expect this perfect \DOTHREE precipitate to decompose to bring the solid solution equilibrium value and then to still see the formation of new \DOTHREE SRO clusters forming in the BCC domain.
+At the lower temperature, in contrast, our earlier calculations with 0~K energy and configurational entropy indicate that the equilibrium concentration of Al in the BCC phase will be extremely low.
+Under these conditions it should be very difficult for enough Al to come together for short lived SRO clusters, and we expect little to no decomposition of the initial monolithic precipitate.
+
+Here, we have used a (roughly) spherical \DOTHREE coherent precipitate in the pure-Fe BCC bulk, with the size of the precipitate tuned so that the Al concentration is still 18\%.
+Results of the cluster analysis through time can be see in Fig.~\ref{fig:lee_dissolution} at both temperatures -- the single largest cluster of more than 4000 atoms is not shown.
 Indeed, at the lower temperature there is zero indication of any dissolution of the initial precipitate.
 Some of the intermediate steps show a change in cluster counts for the 2-10 atom range, which may occur as Al atoms swap into the BCC bulk for a transient existence as a point defect, but no other clusters form and survive and the final Al concentration in the BCC is still zero.
 The remaining small clusters occur because some Fe atoms are able to register as having a \DOTHREE-like environment while being perfectly surrounded by other Fe atoms.
-On the other hand, at 873 K, although the system does not reach equilibration we see clear evidence that the precipitate is dissolving: there are dozens of small clusters (2-10 atoms) and two slightly larger clusters (20-30 atoms) which have broken off, and the final Al concentration in the BCC bulk is 4\%.
+On the other hand, at 873 K, we see clear evidence that the precipitate is dissolving: there are dozens of small clusters (2-10 atoms) and one or two slightly larger clusters (20-30 atoms) throughout the simulation, and the final Al concentration in the BCC bulk is 4\%.
 Just as the cold simulation starting from the random solution did not fully equilibrate, neither does the hot simulation starting from full phase decomposition, but the qualitative trend is completely consistent with our earlier observation of SRO in the high temperature-random start MCMD calculation.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{figures/decomposing_clusters}
-    \caption{Identified \DOTHREE clusters evolving with the Lee potential from an initial state of full BCC-\DOTHREE phase separation. Results for (a) 523 K and (b) 873 K show evolution through time with darker bars being later in the simulation. Bins are truncated at 200.}
+    \caption{Identified \DOTHREE clusters evolving with the Lee potential from an initial state of full BCC-\DOTHREE phase separation. Results for (a) 523 K and (b) 873 K show evolution through time with darker bars being later in the simulation.}
     \label{fig:lee_dissolution}
+\end{figure}
+
+If this entropically-driven perspective is correct, we should also see that the observed SRO clusters are not infinitely long lived, but eventually dissolve only to reform somewhere else.
+To study this, we can look at what fraction of sites identified as part of a \DOTHREE cluster are new, i.e. were not identified as \DOTHREE sites in the last snapshot of the system's evolution.
+This is shown in Fig.~\ref{fig:turnover} at both low and high temperature for the Lee potential starting from random solid solution.
+Due to the large amount of MD time (10 ps) and large number of trial MC swaps (10\% of the system 100 times), we can expect the sequential snapshots to be quite well decorrelated.
+
+By studying the system energy as a function of time back in Fig.~\ref{fig:energy_conv} we know that the 523 K simulation is not well converged.
+With the additional data here we see that less than 20\% of the \DOTHREE sites in each snapshot are new, and indeed this roughly corresponds to total number of additional sites as the system continues to phase decompose!
+So at this low temperature we effectively have the formation and ripening of clusters.
+In contrast, although there is still some weak upwards trend in the total number of \DOTHREE sites, at 873 K we see that the phase transformation has more or less stabilized for the last five snapshots.
+In this near-equilibium regime, we see that full \emph{half} of the atoms participating in a \DOTHREE cluster are not preserved from snapshot to snapshot.
+This is completely consistent with our picture of the ``rolling boil'' of SRO precipitates forming, dissolving, and reforming at this high temperature.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{figures/cluster_turnover}
+    \caption{Total number of \DOTHREE sites identified at each frame (solid) (i.e. 10 ps MD time and 100 iterations of performing MC trials on 10\% of the system) and the fraction of sites which were \emph{not} in clusters in the last frame (dashed). Results shown for 523 K (blue circles) and 873 K (orange squares).}
+    \label{fig:turnover}
 \end{figure}
 
 As a bit of an aside, we can also test whether Fig.~\ref{fig:expanded_0K_phases} makes accurate predictions for the Mendelev potential.
