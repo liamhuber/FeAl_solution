@@ -28,9 +28,7 @@ jobs:
         environment-file: environment.yml
     - name: Setup
       shell: bash -l {0}
-      run: |
-        python .github/ci_support/pyironconfig.py
-        pip install coverage
+      run: python .github/ci_support/pyironconfig.py
     - name: Test
       shell: bash -l {0}
-      run: coverage run -m unittest discover tests
+      run: python -m unittest discover tests/unit
