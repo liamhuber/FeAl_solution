@@ -11,7 +11,7 @@ Steps to run:
 
 With steps (0-2) you can already play around in `example.ipynb`, which will recreate one of the early manuscript figures with minimal computational cost.
 
-The purpose here is simply to provide scientific reproducibility, not to supply a fully extensible/reusable/magical and beautiful software package, but nonetheless at list a little effort was put into documentation and usability -- we hope it's helpful.
+The purpose here is simply to provide scientific reproducibility, not to supply a fully extensible/reusable/magical and beautiful software package, but nonetheless at least a little effort has been put into documentation and usability -- we hope it's helpful.
 
 ## License
 pyiron, the pyiron publication template, and this fork of it are all licensed under the BSD-3-Clause license which is included in the `LICENSE` file. 
