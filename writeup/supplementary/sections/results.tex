@@ -11,11 +11,11 @@ Nonetheless, for the rest of our investigation we can safely focus on the EAM po
     \label{fig:0K_phases}
 \end{figure}
 
-In addition to being BCC stable, we know that the potentials should be dominated by a solid solution at 18\% Al, and that the \DOTHREE phase should also be energetically competitive such that it has the chance of appearing as small SRO clusters.
+In addition to being BCC stable, we know that the potentials should be dominated by a solid solution at 18\% Al, and that at higher concentrations the \DOTHREE phase should also be energetically competitive.
 To this end, the expanded diagram in Fig.~\ref{fig:expanded_0K_phases} to include the random solid solution energy at Al concentrations up to the nominal \DOTHREE concentration.
 At each concentration ten different random configurations of 432 atoms ($6\times6\times6$ BCC units) we relaxed at zero pressure, and the final energy averaged over.
 The error bars for the solid solution shows the 95\% confidence interval from the sampling (i.e. roughly double the standard deviation).
-During our exploration we discovered that the Mendelev potential actually shows a strong preference for alternative ordered structures with column and planar Al.
+During our exploration we discovered that the Mendelev potential actually shows a strong preference for alternative ordered structures with columnar and planar Al.
 We included these configurations at different Al concentration by varying their inter-columnar or inter-planar spacing.
 Representatives of all of these are visualized in Fig.~\ref{fig:structures}.
 %
@@ -36,10 +36,12 @@ Representatives of all of these are visualized in Fig.~\ref{fig:structures}.
 In addition to the 0~K potential energy, for the BCC solid solution, the ideal entropy of mixing was included at both the experimental annealing temperatures.
 This demonstrates the increasing benefit to the \emph{free} energy for the system to occupy a disordered state.
 In principle the entropy of mixing is also relevant for the other phases -- even our SRO clusters may contain chemical antisites and do not need to \emph{perfectly} conform to the reference ordering -- but at this stage they are omitted, as is vibrational entropy for all phases.
-Even with these simplifications, we can already draw important conclusions: first, the Mendelev potential will never display \DOTHREE SRO at 18\% Al -- by constructing a parallel tangent line between the minima of the phases, we can expect the system is likely to form either a composition of solid solution and the layered structure, or simply form into ordered layers.
+Even with these simplifications, we can already draw important conclusions: first, the Mendelev potential will never display \DOTHREE SRO at 18\% Al, and indeed even at the nominal \DOTHREE concentration of 25\% Al it is \emph{still} not the preferable state for this potential -- by constructing a parallel tangent line between the minima of the phases, we can expect the system is likely to form either a composition of solid solution and the layered structure, or simply form into ordered layers.
 The potential energy of this layered structure sits so far below the \DOTHREE phase that we should never expect to see \DOTHREE form in any significant fraction.
-The second key observations is that for the Lee potential a similar Gibbs-tie-line analysis shows that decomposition into solid solution and \DOTHREE \emph{is} possible, but may only occur at higher temperatures than we expect from experiment -- at the lower temperature of 523 K we can also expect a decomposition into BCC and \DOTHREE, but with almost no Al in the BCC solution.
+Second, \BTWO formation is similarly unlikely at the nominal alloy composition, although the preference for planar and columnar Al configurations can be interpreted as colmnar or planar \BTWO (which is not what was found experimentally, where \BTWO SRO clusters are generally spherical).
+The third key observation is that for the Lee potential a similar Gibbs-tie-line analysis shows that decomposition into solid solution and \DOTHREE \emph{is} possible, but may only occur at higher temperatures than we expect from experiment -- at the lower temperature of 523 K we can also expect a decomposition into BCC and \DOTHREE, but with almost no Al in the BCC solution.
 I.e. this potential seems to have an unphysically low solubility of Al in bulk BCC Fe.
+Finally, for the Lee potential we also do not expect any \BTWO SRO.
 
 Next, to allow the full interplay and competition of all factors including vibrational entropy, we perform full MCMD calculations using the variance constrained approach~\cite{sadigh2012calculation, sadigh2012scalable} (with a relatively strict constraint $\kappa = 1e4$) to maintain the Al concentration very close to the nominal experimental value of 18\%.
 Estimating the chemical potential, $\Delta \mu$ from the change in 0~K potential energies of the most favourable phases -- BCC and \DOTHREE (layered Al) for the Lee (Mendelev) potential -- gives $|\Delta \mu| < 0.1~\mathrm{eV}$ ($<0.3~\mathrm{eV}$) for the Lee (Mendelev) potential.
@@ -73,8 +75,9 @@ We found that a threshold value of 13 of the 14 NN gives us gives good resolutio
 The interested reader can examine the \code{github} repository~\cite{feal} for more detail.
 
 The resulting histograms for identified clusters -- ignoring \emph{single atom} ``clusters'' and binning by ten atoms at a time -- can be seen in Figs.~\ref{fig:mendelev_hist} and \ref{fig:lee_hist} for the Mendelev and Lee potentials, respectively.
-The Mendelev potential shows a very mild decrease in \DOTHREE clusters, suggesting that the small random clusters may have some small driving force to group together into fewer, very slightly larger clusters. For \BTWO the opposite effect is seen, but it is clear from examining the total number of clusters that this is trivial.
-At neither temperature and for neither reference phase does the Mendelev potential exhibit SRO.
+The Mendelev potential shows a very mild decrease in \DOTHREE clusters, suggesting that the small random clusters may have some small driving force to group together into fewer, very slightly larger clusters.
+For \BTWO the opposite effect is seen, but it is clear from examining the total number of clusters that this is trivial.
+At neither temperature and for neither reference phase does the Mendelev potential exhibit SRO to either of the relevant phases.
 
 Meanwhile, the Lee potential shows a similar non-result for \BTWO ordering, but we observe a distinct trend for SRO of \DOTHREE clusters, especially at the higher temperature.
 At 523 K we see one medium sized cluster (about 50 atoms) and ten small clusters in the 10-20 atom range,
@@ -82,9 +85,9 @@ but this calculation was poorly converged.
 At 873 K the calculation was well converged and here we see four large clusters (>100 atoms, where the binning is truncated), as well as a collection of medium sized clusters, and some small clusters.
 Note that this histogram is truncated at a size of 100, so the four counts at the largest size are actually all different sizes, each some hundreds of atoms.
 
-By referring back to our simplified ``phase diagram'' in Fig.~\ref{fig:expanded_0K_phases}, we can see that we expect to be in the miscibility gap between the solid solution and \DOTHREE phases.
+By referring back to Fig.~\ref{fig:expanded_0K_phases}, we can see that we expect to be in the miscibility gap between the solid solution and \DOTHREE phases.
 So, at 873 K where we see the formation of a whole distribution of clusters, are we really at a thermodynamic equilibrium or is this merely a transient state on the path to perfect phase separation?
-Even though we are inside a miscibility gap, and ignoring unlikely scenarios like an negative solid solution/\DOTHREE interface energy, there is still a clear explanation for why we may observe SRO instead of \emph{only} decomposition: while the system still wants to form \DOTHREE, there at higher temperatures there is an increased entropic benefit to allowing this \DOTHREE to occur in many small clusters spread throughout the system.
+Even though we are inside a miscibility gap, and ignoring unlikely scenarios like a negative solid solution/\DOTHREE interface energy, there is still a clear explanation for why we may observe SRO instead of \emph{only} decomposition: while the system still wants to form \DOTHREE, there at higher temperatures there is an increased entropic benefit to allowing this \DOTHREE to occur in many small clusters spread throughout the system instead of by full phase separation.
 In the classic image of a TTT diagram, we may be up above the nose, where the formation of a precipitate above the critical size for Ostwald ripening (i.e. completely stable against decomposition) becomes exceedingly unlikely -- or at least takes a very long time.
 Since the MCMD infrastructure is not well-optimized for MEAM potentials like the Lee potential, simply running much longer is not a desirable solution.
 
@@ -129,10 +132,9 @@ This is shown in Fig.~\ref{fig:turnover} at both low and high temperature for th
 Due to the large amount of MD time (10 ps) and large number of trial MC swaps (10\% of the system 100 times), we can expect the sequential snapshots to be quite well decorrelated.
 
 By studying the system energy as a function of time back in Fig.~\ref{fig:energy_conv} we know that the 523 K simulation is not well converged.
-With the additional data here we see that less than 20\% of the \DOTHREE sites in each snapshot are new, and indeed this roughly corresponds to total number of additional sites as the system continues to phase decompose!
-So at this low temperature we effectively have the formation and ripening of clusters.
-In contrast, although there is still some weak upwards trend in the total number of \DOTHREE sites, at 873 K we see that the phase transformation has more or less stabilized for the last five snapshots.
-In this near-equilibium regime, we see that full \emph{half} of the atoms participating in a \DOTHREE cluster are not preserved from snapshot to snapshot.
+With the additional data here we see that less than 20\% of the \DOTHREE sites in each snapshot are new, and indeed this roughly corresponds to total number of additional sites as the system continues to phase decompose -- i.e. at this low temperature we effectively have the formation and ripening of clusters.
+In contrast, although there is still some weak upwards trend in the total number of \DOTHREE sites, at 873 K we see that the phase transformation has more or less stabilized for the last five snapshots and the total sites identified as \DOTHREE is roughly constant.
+In this near-equilibrium regime, we see that fully \emph{half} of the atoms participating in a \DOTHREE cluster are not preserved from snapshot to snapshot.
 This is completely consistent with our picture of the ``rolling boil'' of SRO precipitates forming, dissolving, and reforming at this high temperature.
 
 \begin{figure}[h]
@@ -148,6 +150,7 @@ However, both these shapes can be thought of as a very particularly arranged \BT
 By weakening our clustering criterion to 11 out of 14 NN and examining some of the larger \BTWO clusters identified, we can indeed locate the formation of small plate-like precipitates which support the planar phase, shown in Fig.~\ref{fig:mendelev_structure}(a) where one of the larger clusters is plotted for the equilibrated system at 523~K.
 Partial columns of Al are also clearly visible in the full structure, also shown in Fig.~\ref{fig:mendelev_structure}(b).
 As with the other structure plots, the atoms are always mapped back to their lattice positions, although their true atomic positions of the snapshot are disorderly as they are the output of an MD trajectory.
+Since the clusters identified by ML in the experimental samples appear to be roughly spherical, we believe this behaviour is just an artefact of the empirical potential and not an indication that it is more realistic than the Lee potential in this regime.
 %
 \begin{figure}[h]
     \centering
